@@ -1,0 +1,35 @@
+<template>
+  <div class="row">
+    <div class="col-6">
+      <ul class="nav nav-pills mb-1 d-inline-block">
+        <li class="nav-item dropdown ms-auto">
+          <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
+            <h5 class="d-inline pt-2 mb-0 name">Current Website</h5>
+          </a>
+
+          <div class="dropdown-menu websites left">
+            <a class="dropdown-item cp" href="?host=analytics.serv.rs">Analytics.serv.rs</a>
+          </div>
+        </li>
+      </ul>
+
+      <span class="text-success d-none d-md-inline-block dot">·</span>
+      <span class="current-visitors d-none d-md-inline-block">No current visitors</span>
+    </div>
+
+    <div class="col-6">
+      <ul class="nav nav-pills mb-1">
+        <li class="nav-item dropdown ms-auto">
+          <a class="nav-link dropdown-toggle right cp" data-bs-toggle="dropdown" role="button">Latest</a>
+          <div class="dropdown-menu right">
+            <a class="dropdown-item cp" onclick="setRange(1)">Latest</a>
+            <a class="dropdown-item cp" onclick="setRange(-1)">Yesterday</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item cp" onclick="setRange(7)">Last 7 Days</a>
+            <a class="dropdown-item cp" onclick="setRange(30)">Last 30 Days</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
