@@ -1,14 +1,29 @@
+<script setup>
+import { mapState, mapGetters, mapMutations, mapActions } from '../store/map-state'
+import { useStore } from 'vuex'
+
+const store = useStore();
+
+const { host, domains } = mapGetters();
+
+// const domains = store.getters.domains;
+// const host = store.getters.host;
+
+
+</script>
+
 <template>
   <div class="row">
     <div class="col-6">
       <ul class="nav nav-pills mb-1 d-inline-block">
         <li class="nav-item dropdown ms-auto">
           <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
-            <h5 class="d-inline pt-2 mb-0 name">Current Website</h5>
+            <h5 class="d-inline pt-2 mb-0 name">{{ host }}</h5>
           </a>
 
           <div class="dropdown-menu websites left">
-            <a class="dropdown-item cp" href="?host=analytics.serv.rs">Analytics.serv.rs</a>
+            <a v-for="domain in domains" class="dropdown-item cp" :href="`?host=${ domain }`">{{ domain }}</a>
+            <a class="dropdown-item cp" @click="">Custom Domain</a>
           </div>
         </li>
       </ul>

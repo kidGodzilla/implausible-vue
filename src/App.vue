@@ -1,8 +1,19 @@
 <script setup>
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+
 import Footer from './components/Footer.vue';
 import Header from './components/Header.vue';
 import Modal from './components/Modal.vue';
 import Body from './components/Body.vue';
+
+const store = useStore();
+
+import { query, queryDomains, queryCounts } from './store/query-utils';
+
+queryDomains(store);
+queryCounts(store, 'pathname');
+
 </script>
 
 <template>
