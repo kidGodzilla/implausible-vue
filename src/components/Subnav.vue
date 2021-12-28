@@ -9,6 +9,15 @@ function setRange (v) {
   store.commit('setRange', v);
 }
 
+function addCustomDomain () {
+  var p = prompt('Enter domain name');
+
+  if (p) {
+    p = p.toLowerCase().trim().replace('www.', '');
+    if (p) location.search = `?host=${ p }&range=${ range.value }`;
+  }
+}
+
 </script>
 
 <template>
@@ -22,7 +31,7 @@ function setRange (v) {
 
           <div class="dropdown-menu websites left">
             <a v-for="domain in domains" class="dropdown-item cp" :href="`?host=${ domain }&range=${ range }`">{{ domain }}</a>
-            <a class="dropdown-item cp" @click="">Custom Domain</a>
+            <a class="dropdown-item cp" @click="addCustomDomain">Custom Domain</a>
           </div>
         </li>
       </ul>

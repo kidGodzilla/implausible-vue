@@ -59,6 +59,8 @@ export async function queryDomains(store) {
     res.forEach(item => domains.push(item.host));
     domains.sort();
 
+    domains = domains.filter(domain => !domain.includes('localhost'));
+
     // console.log('domains', domains);
     console.timeEnd('queryDomains');
     store.commit('setDomains', domains);

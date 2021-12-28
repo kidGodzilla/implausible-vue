@@ -19,5 +19,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.5.2/dist/svgMap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var server = 'https://analytics.serv.rs' || `${ location.protocol }//${ location.host }`;
+            window._script_text = $('<textarea />').html(`&lt;script src="${ server }/a.js">&lt;/script>`).text();
+            var clippy = new ClipboardJS('#embedScript a, #script');
+
+            clippy.on('success', function(e) {
+                $('#embedScript span').removeClass('d-none');
+                setTimeout(function () { $('#embedScript span').addClass('d-none') }, 3456);
+            });
+        });
+    </script>
   </body>
 </html>

@@ -1,3 +1,10 @@
+<script setup>
+const { ref } = 'vue';
+
+const script_text = window._script_text;
+
+</script>
+
 <template>
   <div class="modal" id="embedScript" tabindex="-1">
     <div class="modal-dialog">
@@ -9,7 +16,7 @@
         <div class="modal-body">
           <p>Embed this script on your website, and your data will appear here (publicly).</p>
           <p>
-            <textarea rows="1" class="form-control" id="script" data-clipboard-target="#script" style="resize: none; font-family: monospace"></textarea>
+            <textarea rows="1" class="form-control" id="script" data-clipboard-target="#script" style="resize: none; font-family: monospace">{{ script_text }}</textarea>
             <small class="d-block mt-1">
               <a class="cp" data-clipboard-target="#script">Copy to clipboard</a>
               <span class="d-none">&nbsp;Copied!</span>
@@ -18,7 +25,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+<!--          <button type="button" class="btn btn-primary">Save changes</button>-->
         </div>
       </div>
     </div>
