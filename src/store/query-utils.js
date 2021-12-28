@@ -65,13 +65,13 @@ export async function queryDomains(store) {
     return domains;
 }
 
-export async function queryCounts(store, column = 'hour') {
+export async function queryCounts(store, column = 'hour', max = 10) {
     console.time('queryCounts');
 
     let isTimeseries = column === 'hour' || column === 'date';
     let orderByValue = isTimeseries ? column : `count(*)`;
     let direction = isTimeseries ? 'ASC' : 'DESC';
-    let limit = isTimeseries ? '' : ' LIMIT 25';
+    let limit = isTimeseries ? '' : ` LIMIT ${ max }`;
 
     let sql = `SELECT ${ column }, count(*) FROM visits${ whereClauseComponents(store) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
     let res = await query(sql);
