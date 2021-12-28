@@ -1,8 +1,8 @@
 <script setup>
-import { mapState, mapGetters, mapMutations, mapActions } from '../store/map-state'
+import { mapGetters } from '../store/map-state'
 import { useStore } from 'vuex'
 
-const { host, domains, rangeString } = mapGetters();
+const { host, domains, range, rangeString } = mapGetters();
 const store = useStore();
 
 function setRange (v) {
@@ -21,7 +21,7 @@ function setRange (v) {
           </a>
 
           <div class="dropdown-menu websites left">
-            <a v-for="domain in domains" class="dropdown-item cp" :href="`?host=${ domain }`">{{ domain }}</a>
+            <a v-for="domain in domains" class="dropdown-item cp" :href="`?host=${ domain }&range=${ range }`">{{ domain }}</a>
             <a class="dropdown-item cp" @click="">Custom Domain</a>
           </div>
         </li>
