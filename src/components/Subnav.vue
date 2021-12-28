@@ -2,13 +2,12 @@
 import { mapState, mapGetters, mapMutations, mapActions } from '../store/map-state'
 import { useStore } from 'vuex'
 
+const { host, domains, rangeString } = mapGetters();
 const store = useStore();
 
-const { host, domains } = mapGetters();
-
-// const domains = store.getters.domains;
-// const host = store.getters.host;
-
+function setRange (v) {
+  store.commit('setRange', v);
+}
 
 </script>
 
@@ -35,13 +34,13 @@ const { host, domains } = mapGetters();
     <div class="col-6">
       <ul class="nav nav-pills mb-1">
         <li class="nav-item dropdown ms-auto">
-          <a class="nav-link dropdown-toggle right cp" data-bs-toggle="dropdown" role="button">Latest</a>
+          <a class="nav-link dropdown-toggle right cp" data-bs-toggle="dropdown" role="button">{{ rangeString }}</a>
           <div class="dropdown-menu right">
-            <a class="dropdown-item cp" onclick="setRange(1)">Latest</a>
-            <a class="dropdown-item cp" onclick="setRange(-1)">Yesterday</a>
+            <a class="dropdown-item cp" @click="setRange(1)">Latest</a>
+            <a class="dropdown-item cp" @click="setRange(-1)">Yesterday</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item cp" onclick="setRange(7)">Last 7 Days</a>
-            <a class="dropdown-item cp" onclick="setRange(30)">Last 30 Days</a>
+            <a class="dropdown-item cp" @click="setRange(7)">Last 7 Days</a>
+            <a class="dropdown-item cp" @click="setRange(30)">Last 30 Days</a>
           </div>
         </li>
       </ul>

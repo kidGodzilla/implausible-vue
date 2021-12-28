@@ -44,14 +44,14 @@ function isoDate(d) {
 //     return (components.length ? ` WHERE ` : '') + (components.join(' AND ') || '');
 // });
 
-const whereClauseComponents = (store) => {
+export function whereClauseComponents(store) {
     let components = [];
 
     if (store.state.host) components.push(`host = '${ store.state.host }'`);
     if (store.state.start && store.state.end) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
 
     return (components.length ? ` WHERE ` : '') + (components.join(' AND ') || '');
-};
+}
 
 export async function queryDomains(store) {
     console.time('queryDomains');

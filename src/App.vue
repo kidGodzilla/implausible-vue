@@ -12,7 +12,17 @@ const store = useStore();
 import { query, queryDomains, queryCounts } from './store/query-utils';
 
 queryDomains(store);
-queryCounts(store, 'pathname');
+// queryCounts(store, 'pathname');
+
+let queryParams = {};
+location.search.slice(1).split('&').map(s => s.split('=')).forEach(a => queryParams[a[0]] = a[1]);
+store.commit('setHost', queryParams.host || 'analytics.serv.rs');
+
+store.commit('setRange', queryParams.range);
+
+
+
+
 
 </script>
 

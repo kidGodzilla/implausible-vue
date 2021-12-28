@@ -1,6 +1,8 @@
 <script setup>
 import Subnav from '../components/Subnav.vue'
+import Visits from '../components/Visits.vue'
 import Card from '../components/Card.vue'
+import Stat from '../components/Stat.vue'
 </script>
 
 <template>
@@ -10,36 +12,18 @@ import Card from '../components/Card.vue'
 
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-body">
+        <Card>
 
-            <div class="row">
-              <div class="col-6 col-md-3">
-                <h6 class="card-subtitle mb-2 text-muted">Visitors</h6>
-                <h4 class="card-title visitors">-</h4>
-              </div>
-
-              <div class="col-6 col-md-3">
-                <h6 class="card-subtitle mb-2 text-muted">Total Pageviews</h6>
-                <h4 class="card-title pageviews">-</h4>
-              </div>
-
-              <div class="col-6 col-md-3 mt-3 mt-sm-0">
-                <h6 class="card-subtitle mb-2 text-muted">Bounce Rate</h6>
-                <h4 class="card-title bounced">-</h4>
-              </div>
-
-              <div class="col-6 col-md-3 mt-3 mt-sm-0">
-                <h6 class="card-subtitle mb-2 text-muted"><span class="d-none d-sm-inline">Avg. </span>Session Length</h6>
-                <h4 class="card-title duration">-</h4>
-              </div>
-            </div>
-
-            <div id="visits" style="height: 300px;">
-              <div class="spinner-border spinme" role="status"></div>
-            </div>
+          <div class="row">
+            <Stat title="Visitors" />
+            <Stat title="Total Pageviews" />
+            <Stat title="Bounce Rate" />
+            <Stat title="Session Length" />
           </div>
-        </div>
+
+          <Visits />
+
+        </Card>
       </div>
     </div>
 
