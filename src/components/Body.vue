@@ -131,7 +131,7 @@ import PseudoTable from '../components/PseudoTable.vue'
     <div class="row mt-3">
       <div class="col-md-6">
         <Card title="Countries">
-          foo
+          map goe here
         </Card>
       </div>
 
