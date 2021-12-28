@@ -4,11 +4,12 @@ import { useStore } from 'vuex';
 import { ref } from 'vue';
 const store = useStore();
 
-const { column, favicons, links, limit } = defineProps({
+const { column, favicons, links, limit, defaultText } = defineProps({
   column: String,
   favicons: Boolean,
   links: Boolean,
   limit: Number,
+  defaultText: String,
 })
 
 const referrers = ref([]);
@@ -34,7 +35,7 @@ getReferrers();
     <div class="mb-1" v-for="referrer in referrers" v-else>
       <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" :style="`width: ${ (referrer['count(*)'] / maxValue ) * 85 }%`">&nbsp;
 
-        <span v-if="!referrer[column]">{{ 'Direct / None' }}</span>
+        <span v-if="!referrer[column]">{{ defaultText || 'None' }}</span>
 
         <img v-if="referrer[column] && favicons" :src="`https://logo.clearbit.com/${ referrer[column] }`" onerror="this.onerror=null; this.src='default.png';">&nbsp;
 
