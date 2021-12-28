@@ -55,34 +55,28 @@ import PseudoTable from '../components/PseudoTable.vue'
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                <PseudoTable column="referer_host" :favicons="true" :links="true" />
+                <PseudoTable column="referer_host" :favicons="true" :links="true" defaultText="Direct / None" />
               </div>
 
               <div class="tab-pane fade show" id="medium">
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                <div class="mt-2 pseudotable medium">
-                  <div class="spinner-border spinme" role="status"></div>
-                </div>
+                <PseudoTable column="utm_medium" />
               </div>
 
               <div class="tab-pane fade show" id="source">
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                <div class="mt-2 pseudotable source">
-                  <div class="spinner-border spinme" role="status"></div>
-                </div>
+                <PseudoTable column="utm_source" />
               </div>
 
               <div class="tab-pane fade show" id="campaign">
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                <div class="mt-2 pseudotable campaign">
-                  <div class="spinner-border spinme" role="status"></div>
-                </div>
+                <PseudoTable column="utm_campaign" />
               </div>
             </div>
 
