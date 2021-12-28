@@ -55,7 +55,7 @@ import PseudoTable from '../components/PseudoTable.vue'
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                <PseudoTable />
+                <PseudoTable column="referer_host" :favicons="true" :links="true" />
               </div>
 
               <div class="tab-pane fade show" id="medium">
