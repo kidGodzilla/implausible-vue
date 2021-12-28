@@ -17,6 +17,8 @@ const dateFormat = (x) => hourly.value ? new Date(x).toString() : new Date(x).to
 
 async function fetchData() {
   const whereClause = whereClauseComponents(store);
+  let whereClauseLast = whereClause.split(' ').pop().replace(`'`, '').replace(`'`, '');
+  // console.log('whereClause', whereClause, whereClauseLast);
 
   const sql = hourly.value ? `SELECT hour, count(*) FROM visits${whereClause} GROUP BY hour ORDER BY hour ASC;`
                      : `SELECT date, count(*) FROM visits${whereClause} GROUP BY date ORDER BY date ASC;`;
@@ -24,10 +26,11 @@ async function fetchData() {
 
   let result = await query(sql);
   result.forEach(row => {
+    if (hourly.value) row.hour = new Date(whereClauseLast).setHours(row.hour);
     row.value = row['count(*)'];
     delete row['count(*)'];
   });
-  // console.log(result);
+  // console.log('visits fetchData', result);
   lineData.value = result;
   loading.value = false;
 
