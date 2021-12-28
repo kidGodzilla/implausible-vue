@@ -4,7 +4,7 @@ import { useStore } from 'vuex';
 import { ref } from 'vue';
 const store = useStore();
 
-const { column, favicons, links, limit, defaultText, valueColumn, loadTimes, formatter } = defineProps({
+const { column, favicons, links, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
   column: String,
   favicons: Boolean,
   links: Boolean,
@@ -12,7 +12,8 @@ const { column, favicons, links, limit, defaultText, valueColumn, loadTimes, for
   defaultText: String,
   valueColumn: String,
   loadTimes: Boolean,
-  formatter: Function,
+  valueFormatter: Function,
+  keyFormatter: Function,
 });
 
 const rows = ref([]);
@@ -44,20 +45,26 @@ getReferrers();
 
         <span v-if="!row[column]">{{ defaultText || 'None' }}</span>
 
-        <img v-if="row[column] && favicons" :src="`https://logo.clearbit.com/${ row[column] }`" onerror="this.onerror=null; this.src='default.png';">&nbsp;
+        <div v-if="favicons" style="display:inline-block">
+          <img v-if="row[column] && favicons" :src="`https://logo.clearbit.com/${ row[column] }`" onerror="this.onerror=null; this.src='default.png';">&nbsp;
+        </div>
 
-        <a
-            v-if="row[column] && links" class="d-inline-block text-truncate"
-            :href="`http://${ row[column] }`"
-            target="_blank"
-        >
-          {{ row[column] }}
-        </a>
+        <div v-if="links" style="display:inline-block">
+          <a
+              v-if="row[column] && links" class="d-inline-block text-truncate"
+              :href="`http://${ row[column] }`"
+              target="_blank"
+          >
+            {{ row[column] }}
+          </a>
+        </div>
 
-        <span v-if="row[column] && !links">{{ row[column] }}</span>
+
+
+        <span v-if="row[column] && !links">{{ keyFormatter ? keyFormatter(row[column]) : row[column] }}</span>
 
       </div>
-      <span class="float-right text-right pt-1">{{ formatter ? formatter(row[valueColumn || "count(*)"]) : row[valueColumn || "count(*)"] }}</span>
+      <span class="float-right text-right pt-1">{{ valueFormatter ? valueFormatter(row[valueColumn || "count(*)"]) : row[valueColumn || "count(*)"] }}</span>
     </div>
 
   </div>
