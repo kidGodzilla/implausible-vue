@@ -59,10 +59,22 @@ export async function queryDomains(store) {
     res.forEach(item => domains.push(item.host));
     domains.sort();
 
-    console.log('domains', domains);
+    // console.log('domains', domains);
     console.timeEnd('queryDomains');
     store.commit('setDomains', domains);
     return domains;
+}
+
+export async function queryLoadTimes(store) {
+    // SELECT pathname, AVG(load_time) as AvgLoadTime from visits GROUP BY pathname ORDER BY AvgLoadTime DESC
+    console.time('queryLoadTimes');
+
+    let sql = `SELECT pathname, AVG(load_time) as AvgLoadTime from visits${ whereClauseComponents(store) } GROUP BY pathname ORDER BY AvgLoadTime DESC LIMIT 10;`;
+    let res = await query(sql);
+
+    // console.log('queryLoadTimes:', sql, res);
+    console.timeEnd('queryLoadTimes');
+    return res;
 }
 
 export async function queryCounts(store, column = 'hour', max = 10) {
@@ -76,7 +88,7 @@ export async function queryCounts(store, column = 'hour', max = 10) {
     let sql = `SELECT ${ column }, count(*) FROM visits${ whereClauseComponents(store) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
     let res = await query(sql);
 
-    console.log('queryCounts:', sql, res);
+    // console.log('queryCounts:', sql, res);
     console.timeEnd('queryCounts');
     return res;
 }

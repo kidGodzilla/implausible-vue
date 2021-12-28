@@ -4,6 +4,45 @@ import Visits from '../components/Visits.vue'
 import Card from '../components/Card.vue'
 import Stat from '../components/Stat.vue'
 import PseudoTable from '../components/PseudoTable.vue'
+
+import SvgMap from '../components/svgMap.vue'
+
+const twoPlaces = v => v.toFixed(2);
+const twoPlacesMinZero = v => Math.max(0, v.toFixed(2));
+
+import {queryCounts, queryLoadTimes} from '../store/query-utils';
+import { useStore } from 'vuex';
+import { ref } from 'vue';
+const store = useStore();
+
+const countries = ref({
+  AF: { visitors: 587 },
+  AL: { visitors: 4583 },
+  DZ: { visitors: 4293 }
+});
+
+const loading = ref(true);
+
+async function getCountryData() {
+  let result = await queryCounts(store, 'country_code', 999);
+
+  console.log('result', result);
+
+  let newCountries = {};
+
+  result.forEach(row => {
+    newCountries[row.country_code] = {
+      visitors: row['count(*)']
+    };
+  });
+
+  console.log('newCountries', newCountries)
+
+  countries.value = newCountries;
+  loading.value = false;
+}
+
+getCountryData()
 </script>
 
 <template>
@@ -103,18 +142,14 @@ import PseudoTable from '../components/PseudoTable.vue'
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                <div class="mt-2 pseudotable pages">
-                  <div class="spinner-border spinme" role="status"></div>
-                </div>
+                <PseudoTable column="pathname" :links="true" defaultText="None" />
               </div>
 
               <div class="tab-pane fade show" id="loadtimes">
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">Avg. Load Time</small>
 
-                <div class="mt-2 pseudotable loadtimes">
-                  <div class="spinner-border spinme" role="status"></div>
-                </div>
+                <PseudoTable column="pathname" valueColumn="AvgLoadTime" :loadTimes="true" :formatter="twoPlacesMinZero" />
               </div>
             </div>
           </div>
@@ -125,7 +160,7 @@ import PseudoTable from '../components/PseudoTable.vue'
     <div class="row mt-3">
       <div class="col-md-6">
         <Card title="Countries">
-          map goe here
+          <SvgMap :countries="countries" />
         </Card>
       </div>
 
@@ -156,55 +191,39 @@ import PseudoTable from '../components/PseudoTable.vue'
               <small class="text-muted w-495 d-inline-block">Device Type</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <div class="mt-2 pseudotable devices">
-                <div class="spinner-border spinme" role="status"></div>
-              </div>
+              <PseudoTable column="device_type" />
 
               <hr>
 
-              <div class="mt-2 pseudotable bots"></div>
+              <PseudoTable column="bot" />
             </div>
 
             <div class="tab-pane fade" id="new">
               <small class="text-muted w-495 d-inline-block">New vs. Returning</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <div class="mt-2 pseudotable new">
-                <div class="mb-1">
-                  <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" style="width: 85%">&nbsp;New</div>
-                  <span class="float-right text-right pt-1">138</span>
-                </div>
-                <div class="mb-1">
-                  <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" style="width: 33.8768115942029%">&nbsp;Returning</div>
-                  <span class="float-right text-right pt-1">55</span>
-                </div></div>
+              <PseudoTable column="is_new" />
             </div>
 
             <div class="tab-pane fade" id="browser">
               <small class="text-muted w-495 d-inline-block">Browser</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <div class="mt-2 pseudotable browsers">
-                <div class="spinner-border spinme" role="status"></div>
-              </div>
+              <PseudoTable column="browser" />
             </div>
 
             <div class="tab-pane fade" id="language">
               <small class="text-muted w-495 d-inline-block">Language</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <div class="mt-2 pseudotable languages">
-                <div class="spinner-border spinme" role="status"></div>
-              </div>
+              <PseudoTable column="lang" />
             </div>
 
             <div class="tab-pane fade" id="os">
               <small class="text-muted w-495 d-inline-block">OS</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <div class="mt-2 os">
-                <div class="spinner-border spinme" role="status"></div>
-              </div>
+              <PseudoTable column="os" />
             </div>
           </div>
 
