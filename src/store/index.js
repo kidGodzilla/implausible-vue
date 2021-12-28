@@ -12,6 +12,7 @@ export default createStore({
             host: 'analytics.serv.rs',
             start: daysAgo(0),
             end: daysAgo(0),
+            range: '1',
             rangeString: 'Latest',
         }
     },
@@ -20,6 +21,7 @@ export default createStore({
         host: state => state.host,
         start: state => state.start,
         end: state => state.end,
+        range: state => state.range,
         rangeString: state => state.rangeString,
     },
     mutations: {
@@ -51,8 +53,9 @@ export default createStore({
             state.rangeString = values[0];
             state.start = daysAgo(values[1]);
             state.end = daysAgo(values[2]);
+            state.range = range || '1';
 
-            let targetSearch = `?host=${state.host}&range=${range || '1'}`;
+            let targetSearch = `?host=${ state.host }&range=${ range || '1' }`;
             if (location.search !== targetSearch) location.search = targetSearch;
         },
     },
