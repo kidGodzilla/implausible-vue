@@ -38,7 +38,7 @@ async function createOneWorker() {
                 config: {
                     serverMode: "full",
                     url: `${ location.protocol }//${ location.host }/analytics.sqlite3`,
-                    requestChunkSize: (1024 * 32)
+                    requestChunkSize: (1024 * 64)
                 }
             }],
             workerUrl.toString(),
