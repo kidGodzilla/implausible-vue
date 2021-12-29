@@ -6,11 +6,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "git push dokku main:master",
-    "start": "serve dist -p 5000 -s"
+    "start": "node ."
   },
   "dependencies": {
     "bootstrap": "^5.1.3",
     "bootswatch": "^5.1.3",
+    "express": "^4.17.2",
     "jquery": "^3.6.0",
     "morris.js": "^0.5.0",
     "popper.js": "^1.16.1",

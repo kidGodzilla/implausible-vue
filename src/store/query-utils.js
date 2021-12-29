@@ -11,7 +11,7 @@ const wasmUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sql-wasm.wasm", 
 // let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }` : `${ location.protocol }//analytics.serv.rs`) + `/analytics.sqlite3`;
 // let url = `${ location.protocol }//${ location.hostname === 'localhost' ? location.host : 'implausible.b-cdn.net' }/analytics.sqlite3`;
 // let url = `${ location.protocol }//implausible.b-cdn.net/analytics.sqlite3`;
-let url = null;
+// let url = null;
 
 async function init() {
     if (window._worker) return window._worker;
@@ -21,7 +21,7 @@ async function init() {
                 from: "inline",
                 config: {
                     serverMode: "full",
-                    url: url || `${ location.protocol }//${ location.host }/analytics.sqlite3`,
+                    url: `${ location.protocol }//${ location.host }/analytics.sqlite3`,
                     requestChunkSize: 1024
                 }
             }],
