@@ -1,7 +1,13 @@
-# Vue 3 + Vite
+# Implausible Analytics (Vue 3)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A toy application in Vue 3 that tracks and reports on user behavior, using `sql.js-httpvfs`.
 
-## Recommended IDE Setup
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+## Demo 
+
+https://implausible.serv.rs/?range=7
+
+## Backend, previous frontend:
+
+https://github.com/kidGodzilla/unsimple-analytics
+
