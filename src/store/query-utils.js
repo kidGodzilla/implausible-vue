@@ -13,6 +13,9 @@ const wasmUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sql-wasm.wasm", 
 // let url = `${ location.protocol }//implausible.b-cdn.net/analytics.sqlite3`;
 // let url = null;
 
+let queryParams = {};
+location.search.slice(1).split('&').map(s => s.split('=')).forEach(a => queryParams[a[0]] = a[1]);
+
 const randomString = () => Math.random().toString(36).substr(2, 9);
 
 async function init() {
@@ -24,7 +27,7 @@ async function init() {
                 config: {
                     serverMode: "full",
                     url: `${ location.protocol }//${ location.host }/analytics.sqlite3`,
-                    requestChunkSize: 1024
+                    requestChunkSize: (1024 * (queryParams.chunks || 8))
                 }
             }],
             workerUrl.toString(),
