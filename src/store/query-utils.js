@@ -27,7 +27,7 @@ async function init() {
                 config: {
                     serverMode: "full",
                     url: `${ location.protocol }//${ location.host }/analytics.sqlite3`,
-                    requestChunkSize: (1024 * (queryParams.chunks || 8))
+                    requestChunkSize: (1024 * (queryParams.chunks || 32))
                 }
             }],
             workerUrl.toString(),
