@@ -9,7 +9,7 @@ const wasmUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sql-wasm.wasm", 
 // console.log('query-utils store', store);
 
 // let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }` : `${ location.protocol }//analytics.serv.rs`) + `/analytics.sqlite3`;
-let url = `${ location.protocol }//${ location.hostname === 'localhost' ? location.host : 'analytics.serv.rs' }/analytics.sqlite3`;
+let url = `${ location.protocol }//${ location.hostname === 'localhost' ? location.host : 'implausible.b-cdn.net' }/analytics.sqlite3`;
 
 async function init() {
     if (window._worker) return window._worker;
