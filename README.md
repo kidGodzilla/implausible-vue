@@ -1,9 +1,8 @@
 # Implausible Analytics (Vue 3)
 
+A simple analytics implementation that collects and serves data from a static CDN, using web workers, WASM, range requests, and some other fun tricks.
+
 ![Screenshot](screenshot.jpg)
-
-A toy application in Vue 3 that tracks and reports on user behavior, using `sql.js-httpvfs`.
-
 
 ## Demo 
 
