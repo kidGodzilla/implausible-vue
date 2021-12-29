@@ -13,6 +13,8 @@ const wasmUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sql-wasm.wasm", 
 // let url = `${ location.protocol }//implausible.b-cdn.net/analytics.sqlite3`;
 // let url = null;
 
+const randomString = () => Math.random().toString(36).substr(2, 9);
+
 async function init() {
     if (window._worker) return window._worker;
 
@@ -37,8 +39,11 @@ async function init() {
 
 export async function query(string) {
     let worker = await init();
+    let s = randomString();
+    console.time('query time '+s);
     let result = await worker.db.query(string);
     console.log('query', string, result);
+    console.timeEnd('query time '+s);
     return result;
 }
 
@@ -72,7 +77,6 @@ export function whereClauseComponents(store) {
 }
 
 export async function queryDomains(store) {
-    console.time('queryDomains');
     let res = await query(`SELECT DISTINCT host FROM visits`), domains = [];
     res.forEach(item => domains.push(item.host));
     domains.sort();
@@ -80,26 +84,19 @@ export async function queryDomains(store) {
     domains = domains.filter(domain => !domain.includes('localhost'));
 
     // console.log('domains', domains);
-    console.timeEnd('queryDomains');
     store.commit('setDomains', domains);
     return domains;
 }
 
 export async function queryLoadTimes(store) {
-    // SELECT pathname, AVG(load_time) as AvgLoadTime from visits GROUP BY pathname ORDER BY AvgLoadTime DESC
-    console.time('queryLoadTimes');
-
     let sql = `SELECT pathname, AVG(load_time) as AvgLoadTime from visits${ whereClauseComponents(store) } GROUP BY pathname ORDER BY AvgLoadTime DESC LIMIT 10;`;
     let res = await query(sql);
 
     // console.log('queryLoadTimes:', sql, res);
-    console.timeEnd('queryLoadTimes');
     return res;
 }
 
 export async function queryCounts(store, column = 'hour', max = 10) {
-    console.time('queryCounts');
-
     let isTimeseries = column === 'hour' || column === 'date';
     let orderByValue = isTimeseries ? column : `count(*)`;
     let direction = isTimeseries ? 'ASC' : 'DESC';
@@ -109,6 +106,5 @@ export async function queryCounts(store, column = 'hour', max = 10) {
     let res = await query(sql);
 
     // console.log('queryCounts:', sql, res);
-    console.timeEnd('queryCounts');
     return res;
 }
