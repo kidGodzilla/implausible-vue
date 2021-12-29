@@ -37,7 +37,9 @@ async function init() {
 
 export async function query(string) {
     let worker = await init();
-    return await worker.db.query(string);
+    let result = await worker.db.query(string);
+    console.log('query', string, result);
+    return result;
 }
 
 function daysAgo(n) {
