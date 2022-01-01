@@ -1,7 +1,8 @@
 <script setup>
 import {queryCounts, queryLoadTimes} from '../store/query-utils';
+import { mapGetters } from '../store/map-state';
+import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
-import { ref } from 'vue';
 const store = useStore();
 
 const { column, favicons, links, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
@@ -16,11 +17,13 @@ const { column, favicons, links, limit, defaultText, valueColumn, loadTimes, val
   keyFormatter: Function,
 });
 
+const { host, range } = mapGetters();
+
 const rows = ref([]);
 const maxValue = ref(0);
 const loading = ref(true);
 
-async function getReferrers() {
+async function getData() {
   let result = loadTimes ? await queryLoadTimes(store) : await queryCounts(store, column, limit || 10);
 
   // console.log('result', column, result);
@@ -32,7 +35,9 @@ async function getReferrers() {
 }
 
 
-getReferrers();
+onMounted(getData);
+watch(host, getData);
+watch(range, getData);
 </script>
 
 <template>

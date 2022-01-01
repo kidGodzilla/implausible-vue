@@ -56,7 +56,7 @@ export default createStore({
             state.range = range || '1';
 
             let targetSearch = `?host=${ state.host }&range=${ range || '1' }`;
-            if (location.search !== targetSearch) location.search = targetSearch;
+            if (location.search !== targetSearch) window.history.pushState('', '', targetSearch);
         },
     },
 });

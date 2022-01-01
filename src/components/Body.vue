@@ -22,11 +22,14 @@ const languageLookup = s => {
 }
 
 import { queryCounts } from '../store/query-utils';
+import { mapGetters } from '../store/map-state';
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import {onMounted, ref, watch} from 'vue';
 const store = useStore();
 
 const countries = ref({});
+
+const { range, host } = mapGetters();
 
 async function getCountryData() {
   let result = await queryCounts(store, 'country_code', 999);
@@ -43,7 +46,9 @@ async function getCountryData() {
   countries.value = newCountries;
 }
 
-getCountryData()
+onMounted(getCountryData);
+watch(host, getCountryData);
+watch(range, getCountryData);
 </script>
 
 <template>

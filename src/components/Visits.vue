@@ -1,12 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed, onMounted, watch} from 'vue'
 import { useStore } from 'vuex';
 import { query, whereClauseComponents } from "../store/query-utils";
 import AreaChart from '../vue-morris/components/area-chart.vue'
 const store = useStore();
 
 import { mapGetters } from '../store/map-state'
-let { start, end } = mapGetters();
+let { start, end, host, range } = mapGetters();
 const lineData = ref([]);
 const loading = ref(true);
 
@@ -36,8 +36,9 @@ async function fetchData() {
 
 }
 
-fetchData();
-
+onMounted(fetchData);
+watch(host, fetchData);
+watch(range, fetchData);
 </script>
 
 <template>

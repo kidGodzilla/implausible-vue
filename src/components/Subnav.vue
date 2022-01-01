@@ -14,8 +14,13 @@ function addCustomDomain () {
 
   if (p) {
     p = p.toLowerCase().trim().replace('www.', '');
-    if (p) location.search = `?host=${ p }&range=${ range.value }`;
+    if (p) window.history.pushState('', '', `?host=${ p }&range=${ range.value }`);
   }
+}
+
+function setHost(domain) {
+  window.history.pushState('', '', `?host=${ domain }&range=${ range.value }`);
+  store.commit('setHost', domain);
 }
 
 </script>
@@ -30,7 +35,7 @@ function addCustomDomain () {
           </a>
 
           <div class="dropdown-menu websites left">
-            <a v-for="domain in domains" class="dropdown-item cp" :href="`?host=${ domain }&range=${ range }`">{{ domain }}</a>
+            <a v-for="domain in domains" class="dropdown-item cp" @click="setHost(domain)">{{ domain }}</a>
             <a class="dropdown-item cp" @click="addCustomDomain">Custom Domain</a>
           </div>
         </li>
