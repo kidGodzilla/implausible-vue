@@ -1,4 +1,4 @@
-import {createDbWorker} from "sql.js-httpvfs";
+import { createDbWorker } from "sql.js-httpvfs";
 const workerUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sqlite.worker.js", import.meta.url);
 const wasmUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
