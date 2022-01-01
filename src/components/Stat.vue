@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import { useStore } from 'vuex';
 import { query, whereClauseComponents } from "../store/query-utils";
+import {mapGetters} from "../store/map-state";
 const store = useStore();
 
 const props = defineProps({
@@ -9,6 +10,7 @@ const props = defineProps({
 })
 
 let stat = ref('-');
+const { host, range } = mapGetters();
 
 // Visitors: SELECT count(DISTINCT ip) from visits
 // Pageviews: SELECT count(*) from VISITS whereclause
@@ -23,64 +25,42 @@ function percentFormatter(float) {
 function fmtMSS(s) { return(s-(s%=60))/60+('m ')+parseInt(s) }
 
 async function getValue() {
+  if (!store.state.host) return;
+
   const whereClause = whereClauseComponents(store);
-  // console.log('whereClause', whereClause);
 
   if (props.title === 'Visitors') {
     const sql = `SELECT count(DISTINCT ip) from visits${whereClause}`;
-    // console.log(sql);
-
     let result = await query(sql);
-    // console.log(result, result[0]['count(DISTINCT ip)']);
     stat.value = result[0]['count(DISTINCT ip)'];
 
   } else if (props.title === 'Total Pageviews') {
     const sql = `SELECT count(*) from VISITS${whereClause}`;
-    // console.log(sql);
-
     let result = await query(sql);
-    // console.log(result, result[0]['count(*)']);
-
     stat.value = result[0]['count(*)'];
 
   } else if (props.title === 'Bounce Rate') {
     let sql = `SELECT count(DISTINCT ip) from visits${whereClause}`;
-    // console.log(sql);
-
     let result = await query(sql);
-    // console.log(result, result[0]['count(DISTINCT ip)']);
-
     let visitorCount = result[0]['count(DISTINCT ip)'];
 
     sql = `SELECT count(DISTINCT ip) from visits${whereClause} AND is_new = 1`;
-    // console.log(sql);
-
     result = await query(sql);
-    // console.log(result, result[0]['count(DISTINCT ip)']);
-
     let onePageVisits = result[0]['count(DISTINCT ip)'];
-
-    // console.log('onePageVisits / visitorCount', onePageVisits / visitorCount, onePageVisits, visitorCount)
 
     stat.value = visitorCount === 0 ? 0 : percentFormatter(onePageVisits / visitorCount);
 
-
   } else if (props.title === 'Session Length') {
     const sql = `SELECT AVG(x.MaxValue) FROM (SELECT ip, max(session_length) as MaxValue from visits${whereClause} GROUP BY ip) x`;
-    // console.log(sql);
-
     let result = await query(sql);
-    // console.log(result, result[0]['AVG(x.MaxValue)']);
-
     stat.value = fmtMSS(result[0]['AVG(x.MaxValue)']) || 0;
 
   }
 }
 
-getValue();
-
-
-
+onMounted(getValue);
+watch(host, getValue);
+watch(range, getValue);
 </script>
 
 <template>

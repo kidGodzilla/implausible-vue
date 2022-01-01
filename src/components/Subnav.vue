@@ -31,7 +31,7 @@ function setHost(domain) {
       <ul class="nav nav-pills mb-1 d-inline-block">
         <li class="nav-item dropdown ms-auto">
           <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
-            <h5 class="d-inline pt-2 mb-0 name">{{ host }}</h5>
+            <h5 class="d-inline pt-2 mb-0 name">{{ host || 'Select a Domain' }}</h5>
           </a>
 
           <div class="dropdown-menu websites left">

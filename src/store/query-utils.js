@@ -89,6 +89,8 @@ export async function queryDomains(store) {
 }
 
 export async function queryLoadTimes(store) {
+    if (!store.state.host) return [];
+
     let sql = `SELECT pathname, AVG(load_time) as AvgLoadTime from visits${ whereClauseComponents(store) } GROUP BY pathname ORDER BY AvgLoadTime DESC LIMIT 10;`;
     let res = await query(sql);
 
@@ -97,6 +99,8 @@ export async function queryLoadTimes(store) {
 }
 
 export async function queryCounts(store, column = 'hour', max = 10) {
+    if (!store.state.host) return [];
+
     let isTimeseries = column === 'hour' || column === 'date';
     let orderByValue = isTimeseries ? column : `count(*)`;
     let direction = isTimeseries ? 'ASC' : 'DESC';

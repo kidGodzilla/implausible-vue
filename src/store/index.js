@@ -9,7 +9,7 @@ export default createStore({
     state () {
         return {
             domains: [],
-            host: 'analytics.serv.rs',
+            host: '',
             start: daysAgo(0),
             end: daysAgo(0),
             range: '1',

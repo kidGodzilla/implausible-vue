@@ -16,6 +16,10 @@ const xkey = computed(() => hourly.value ? 'hour' : 'date');
 const dateFormat = (x) => hourly.value ? new Date(x).toString() : new Date(x).toLocaleString().split(',')[0]
 
 async function fetchData() {
+  if (!host.value) {
+    return loading.value = false;
+  }
+
   const whereClause = whereClauseComponents(store);
   let whereClauseLast = whereClause.split(' ').pop().replace(`'`, '').replace(`'`, '');
   // console.log('whereClause', whereClause, whereClauseLast);
