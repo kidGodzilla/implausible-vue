@@ -37,7 +37,7 @@ async function createOneWorker() {
                 from: "inline",
                 config: {
                     serverMode: "full",
-                    url: `${ location.protocol }//${ location.host }/analytics.sqlite3`,
+                    url: `${ location.protocol }//${ location.host }/analytics.sqlite3.png`,
                     requestChunkSize: (1024 * 32)
                 }
             }],
