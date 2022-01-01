@@ -59,8 +59,6 @@ getReferrers();
           </a>
         </div>
 
-
-
         <span v-if="row[column] && !links">{{ keyFormatter ? keyFormatter(row[column]) : row[column] }}</span>
 
       </div>
