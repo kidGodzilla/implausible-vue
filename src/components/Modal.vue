@@ -1,8 +1,8 @@
 <script setup>
 const { ref } = 'vue';
 
-const script_text = window._script_text;
-
+let server = 'https://analytics.serv.rs' || `${ location.protocol }//${ location.host }`;
+const script_text = window.$('<textarea />').html(`&lt;script src="${ server }/a.js">&lt;/script>`).text();
 </script>
 
 <template>
