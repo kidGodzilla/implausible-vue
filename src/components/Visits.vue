@@ -44,6 +44,7 @@ watch(range, fetchData);
 <template>
   <div id="visits">
     <div class="spinner-border spinme" role="status" v-if="loading"></div>
+    <div v-else-if="!lineData.length">No data for selected period</div>
     <area-chart
         v-else
         id="line" :data="lineData" :xkey="xkey" ykey="value" resize="true"

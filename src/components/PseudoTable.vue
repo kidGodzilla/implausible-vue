@@ -30,7 +30,7 @@ async function getData() {
 
   rows.value = result;
   // console.log(result);
-  maxValue.value = result[0][valueColumn || 'count(*)'];
+  try{ maxValue.value = result[0][valueColumn || 'count(*)']; } catch(e) { maxValue.value = 0 }
   loading.value = false;
 }
 
@@ -44,6 +44,10 @@ watch(range, getData);
   <div class="mt-2 pseudotable">
 
     <div class="spinner-border spinme" role="status" v-if="loading"></div>
+
+    <div class="mb-1" v-else-if="!rows.length">
+      No data for selected period
+    </div>
 
     <div class="mb-1" v-for="row in rows" v-else>
       <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" :style="`width: ${ (row[valueColumn || 'count(*)'] / maxValue ) * 85 }%`">&nbsp;
