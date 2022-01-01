@@ -1,10 +1,16 @@
 const express = require('express');
 const download = require('download');
 const schedule = require('node-schedule');
+const fs = require("fs");
 
 function downloadSqlite() {
     download('https://analytics.serv.rs/analytics.sqlite3?i='+(Math.floor(Math.random() * 9999999)), `${__dirname}/public`).then(() => {
         console.log('Downloaded analytics.sqlite3');
+
+        fs.copyFile('./public/analytics.sqlite3', './public/analytics.sqlite3.png', (err) => {
+            if (err) throw err;
+            console.log('./public/analytics.sqlite3 was copied to ./public/analytics.sqlite3.png');
+        });
     });
 }
 
