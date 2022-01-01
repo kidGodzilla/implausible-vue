@@ -5,10 +5,11 @@ import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore();
 
-const { column, favicons, links, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
+const { column, favicons, links, linkPrefix, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
   column: String,
   favicons: Boolean,
   links: Boolean,
+  linkPrefix: String,
   limit: Number,
   defaultText: String,
   valueColumn: String,
@@ -61,7 +62,7 @@ watch(range, getData);
         <div v-if="links" style="display:inline-block">
           <a
               v-if="row[column] && links" class="d-inline-block text-truncate"
-              :href="`http://${ row[column] }`"
+              :href="`http://${ linkPrefix || '' }${ row[column] }`"
               target="_blank"
           >
             {{ row[column] }}
