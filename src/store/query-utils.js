@@ -2,11 +2,6 @@ import { createDbWorker } from "sql.js-httpvfs";
 const workerUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sqlite.worker.js", import.meta.url);
 const wasmUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
-// let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }` : `${ location.protocol }//analytics.serv.rs`) + `/analytics.sqlite3`;
-// let url = `${ location.protocol }//${ location.hostname === 'localhost' ? location.host : 'implausible.b-cdn.net' }/analytics.sqlite3`;
-// let url = `${ location.protocol }//implausible.b-cdn.net/analytics.sqlite3`;
-// let url = null;
-
 const randomString = () => Math.random().toString(36).substr(2, 9);
 
 let creatingWorker = 0;
