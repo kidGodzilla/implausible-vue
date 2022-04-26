@@ -1,7 +1,7 @@
 <script setup>
 const { ref } = 'vue';
 
-let server = 'https://analytics.serv.rs' || `${ location.protocol }//${ location.host }`;
+let server = 'https://implausible-api.serv.rs' || `${ location.protocol }//${ location.host }`;
 const script_text = window.$('<textarea />').html(`&lt;script src="${ server }/a.js">&lt;/script>`).text();
 </script>
 
