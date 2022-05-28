@@ -107,7 +107,10 @@ export async function queryLoadTimes(store) {
 
     if (SIV) {
         res.forEach(row => {
-            try { row.pathname = SIV.decrypt(CryptoJS.enc.Hex.parse(row.pathname)).toString(CryptoJS.enc.Utf8) } catch(e){}
+            try {
+                let decrypted = SIV.decrypt(CryptoJS.enc.Hex.parse(row.pathname)).toString(CryptoJS.enc.Utf8);
+                if (decrypted && decrypted != 'false') row.pathname = decrypted;
+            } catch(e){}
         });
     }
 
@@ -131,7 +134,10 @@ export async function queryCounts(store, column = 'hour', max = 10) {
 
     if (SIV) {
         res.forEach(row => {
-            try { row[column] = SIV.decrypt(CryptoJS.enc.Hex.parse(row[column])).toString(CryptoJS.enc.Utf8) } catch(e){}
+            try {
+                let decrypted = SIV.decrypt(CryptoJS.enc.Hex.parse(row[column])).toString(CryptoJS.enc.Utf8);
+                if (decrypted && decrypted != 'false') row[column] = decrypted;
+            } catch(e){}
         });
     }
 
