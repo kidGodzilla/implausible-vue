@@ -8,8 +8,10 @@ function daysAgo(n) {
 export default createStore({
     state () {
         return {
+            publicKey: '',
             domains: [],
             host: '',
+            key: '',
             start: daysAgo(0),
             end: daysAgo(0),
             range: '1',
@@ -18,6 +20,8 @@ export default createStore({
     },
     getters: {
         domains: state => state.domains,
+        key: state => state.key,
+        publicKey: state => state.publicKey,
         host: state => state.host,
         start: state => state.start,
         end: state => state.end,
@@ -25,6 +29,12 @@ export default createStore({
         rangeString: state => state.rangeString,
     },
     mutations: {
+        setKey (state, key) {
+            state.key = key;
+        },
+        setPublicKey (state, key) {
+            state.publicKey = key;
+        },
         setDomains (state, domains) {
             state.domains = domains;
         },

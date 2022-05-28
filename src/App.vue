@@ -11,10 +11,57 @@ const store = useStore();
 
 import { query, queryDomains, queryCounts } from './store/query-utils';
 
-queryDomains(store);
+// queryDomains(store);
+
+// Try to get the key and list of hosts from localStorage
+let _key = localStorage.getItem('__analytics_encryption_key');
+let _pkey = localStorage.getItem('__analytics_public_key');
+let _hosts = localStorage.getItem('__analytics_hosts');
+if (_hosts) try { _hosts = JSON.parse(_hosts) } catch(e){}
+if (!Array.isArray(_hosts)) _hosts = null;
 
 let queryParams = {};
 location.search.slice(1).split('&').map(s => s.split('=')).forEach(a => queryParams[a[0]] = a[1]);
+
+async function fetchKeypair() {
+  let url = '/keypair';
+  if (location.hostname === 'localhost') url = 'https://analytics.servers.do/keypair';
+  let response = await fetch(url);
+  let json = await response.json();
+  let { public_key, private_key } = json;
+
+  localStorage.setItem('__analytics_encryption_key', private_key);
+  localStorage.setItem('__analytics_public_key', public_key);
+  store.commit('setPublicKey', public_key);
+  store.commit('setKey', private_key);
+}
+
+if (queryParams.key) {
+  try { queryParams.key = decodeURIComponent(queryParams.key) } catch(e){}
+  localStorage.setItem('__analytics_encryption_key', queryParams.key);
+  store.commit('setKey', queryParams.key);
+} else if (_key) {
+  store.commit('setKey', _key);
+}
+if (queryParams.pkey) {
+  try { queryParams.pkey = decodeURIComponent(queryParams.pkey) } catch(e){}
+  localStorage.setItem('__analytics_public_key', queryParams.pkey);
+  store.commit('setPublicKey', queryParams.pkey);
+} else if (_pkey) {
+  store.commit('setPublicKey', _pkey);
+} else {
+  fetchKeypair()
+}
+
+if (queryParams.host) {
+  if (!_hosts || !Array.isArray(_hosts)) _hosts = [];
+  if (!_hosts.includes(queryParams.host)) _hosts.push(queryParams.host);
+
+  localStorage.setItem('__analytics_hosts', JSON.stringify(_hosts));
+}
+
+if (_hosts) store.commit('setDomains', _hosts);
+
 store.commit('setHost', queryParams.host || '');
 store.commit('setRange', queryParams.range);
 </script>
