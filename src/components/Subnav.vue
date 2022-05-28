@@ -17,6 +17,18 @@ function addCustomDomain() {
   if (p) {
     p = p.toLowerCase().trim().replace('www.', '');
     if (p) window.history.pushState('', '', `?host=${ p }&range=${ range.value }`);
+
+    // Commit updates to Vuex
+    if (p && !(domains.value || []).includes(p)) {
+      let domains_clone = domains.value;
+      if (!Array.isArray(domains_clone)) domains_clone = [];
+      if (!domains_clone.includes(p)) domains_clone.push(p);
+
+      localStorage.setItem('__analytics_hosts', JSON.stringify(domains_clone));
+      store.commit('setDomains', domains_clone);
+    }
+
+    if (p) setHost(p);
   }
 }
 
