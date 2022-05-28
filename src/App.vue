@@ -60,7 +60,10 @@ if (queryParams.host) {
   localStorage.setItem('__analytics_hosts', JSON.stringify(_hosts));
 }
 
-if (_hosts) store.commit('setDomains', _hosts);
+if (_hosts) {
+  _hosts.sort((a, b) => a.localeCompare(b));
+  store.commit('setDomains', _hosts);
+}
 
 store.commit('setHost', queryParams.host || '');
 store.commit('setRange', queryParams.range);
