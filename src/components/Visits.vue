@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, onMounted, watch} from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useStore } from 'vuex';
 import { query, whereClauseComponents } from "../store/query-utils";
 import AreaChart from '../vue-morris/components/area-chart.vue'
