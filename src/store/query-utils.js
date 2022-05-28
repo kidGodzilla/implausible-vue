@@ -1,3 +1,4 @@
+import CryptoJS from './cryptojs-siv';
 import { createDbWorker } from "sql.js-httpvfs";
 const workerUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sqlite.worker.js", import.meta.url);
 const wasmUrl = new URL("../../node_modules/sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
@@ -71,11 +72,17 @@ export function whereClauseComponents(store) {
     let components = [];
 
     if (store.state.host) components.push(`host = '${ store.state.host }'`);
+    if (store.state.host && store.state.key) {
+        const SIV = CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key));
+        const encrypted_host = SIV.encrypt(store.state.host).toString();
+        components[0] = `(${ components[0] } OR host = '${ encrypted_host }')`;
+    }
     if (store.state.start && store.state.end) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
 
     return (components.length ? ` WHERE ` : '') + (components.join(' AND ') || '');
 }
 
+// Since some of these are encrypted, there's no longer a possibility to list all domains in the database
 export async function queryDomains(store) {
     let res = await query(`SELECT DISTINCT host FROM visits`), domains = [];
     res.forEach(item => domains.push(item.host));
@@ -91,15 +98,26 @@ export async function queryDomains(store) {
 export async function queryLoadTimes(store) {
     if (!store.state.host) return [];
 
+    const SIV = store.state.key ? CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key)) : null;
+
     let sql = `SELECT pathname, AVG(load_time) as AvgLoadTime from visits${ whereClauseComponents(store) } GROUP BY pathname ORDER BY AvgLoadTime DESC LIMIT 10;`;
     let res = await query(sql);
 
     // console.log('queryLoadTimes:', sql, res);
+
+    if (SIV) {
+        res.forEach(row => {
+            try { row.pathname = SIV.decrypt(CryptoJS.enc.Hex.parse(row.pathname)).toString(CryptoJS.enc.Utf8) } catch(e){}
+        });
+    }
+
     return res;
 }
 
 export async function queryCounts(store, column = 'hour', max = 10) {
     if (!store.state.host) return [];
+
+    const SIV = store.state.key ? CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key)) : null;
 
     let isTimeseries = column === 'hour' || column === 'date';
     let orderByValue = isTimeseries ? column : `count(*)`;
@@ -110,5 +128,12 @@ export async function queryCounts(store, column = 'hour', max = 10) {
     let res = await query(sql);
 
     // console.log('queryCounts:', sql, res);
+
+    if (SIV) {
+        res.forEach(row => {
+            try { row[column] = SIV.decrypt(CryptoJS.enc.Hex.parse(row[column])).toString(CryptoJS.enc.Utf8) } catch(e){}
+        });
+    }
+
     return res;
 }
