@@ -5,11 +5,13 @@ import { useStore } from 'vuex'
 const { host, domains, range, rangeString } = mapGetters();
 const store = useStore();
 
-function setRange (v) {
+function setRange(v) {
   store.commit('setRange', v);
 }
 
-function addCustomDomain () {
+const capitalizeFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+function addCustomDomain() {
   var p = prompt('Enter domain name');
 
   if (p) {
@@ -31,12 +33,12 @@ function setHost(domain) {
       <ul class="nav nav-pills mb-1 d-inline-block">
         <li class="nav-item dropdown ms-auto">
           <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
-            <h5 class="d-inline pt-2 mb-0 name">{{ host || 'Select a Domain' }}</h5>
+            <h5 class="d-inline pt-2 mb-0 name">{{ capitalizeFirstLetter(host) || 'Select a Domain' }}</h5>
           </a>
 
           <div class="dropdown-menu websites left">
-            <a v-for="domain in domains" class="dropdown-item cp" @click="setHost(domain)">{{ domain }}</a>
-            <a class="dropdown-item cp" @click="addCustomDomain">Custom Domain</a>
+            <a v-for="domain in domains" class="dropdown-item cp" @click="setHost(domain)">{{ capitalizeFirstLetter(domain) }}</a>
+            <a class="dropdown-item cp" @click="addCustomDomain">Add Domain</a>
           </div>
         </li>
       </ul>
