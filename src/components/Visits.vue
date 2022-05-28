@@ -29,8 +29,9 @@ async function fetchData() {
   // console.log(sql);
 
   let result = await query(sql);
+
   result.forEach(row => {
-    if (hourly.value) row.hour = new Date(whereClauseLast).setHours(row.hour);
+    if (hourly.value) row.hour = + new Date(`${ whereClauseLast } ${ row.hour }:00:00 UTC`);
     row.value = row['count(*)'];
     delete row['count(*)'];
   });
