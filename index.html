@@ -25,12 +25,11 @@
 
     <script>
         $(document).ready(function() {
-            var server = 'https://implausible-api.serv.rs' || `${ location.protocol }//${ location.host }`;
-            window._script_text = $('<textarea />').html(`&lt;script src="${ server }/a.js">&lt;/script>`).text();
-            var clippy = new ClipboardJS('#embedScript a, #script');
+            var clippy = new ClipboardJS('#embedScript a, #script, #url');
 
             clippy.on('success', function(e) {
-                $('#embedScript span').removeClass('d-none');
+                e.trigger.nextSibling.classList.remove('d-none');
+                $(e.trigger.nextSibling).find('.d-none').removeClass('d-none');
                 setTimeout(function () { $('#embedScript span').addClass('d-none') }, 3456);
             });
         });
