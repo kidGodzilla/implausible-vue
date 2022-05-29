@@ -11,9 +11,9 @@ const lineData = ref([]);
 const loading = ref(true);
 
 const hourly = computed(() => Math.floor(start.value / 10000) === Math.floor(end.value / 10000));
-const xkey = computed(() => hourly.value ? 'hour' : 'date');
+const xkey = computed(() => !!hourly.value ? 'hour' : 'date');
 
-const dateFormat = (x) => hourly.value ? new Date(x).toString() : new Date(x).toLocaleString().split(',')[0]
+const dateFormat = (x) => !!hourly.value ? new Date(x).toString() : new Date(x).toLocaleString().split(',')[0]
 
 async function fetchData() {
   if (!host.value) {
@@ -31,7 +31,7 @@ async function fetchData() {
   let result = await query(sql);
 
   result.forEach(row => {
-    if (hourly.value) row.hour = + new Date(`${ whereClauseLast } ${ row.hour }:00:00 UTC`);
+    if (!!hourly.value) row.hour = + new Date(`${ whereClauseLast }T${ row.hour < 10 ? '0':'' }${ row.hour }:00:00Z`);
     row.value = row['count(*)'];
     delete row['count(*)'];
   });
