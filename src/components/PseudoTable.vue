@@ -67,13 +67,15 @@ function addIcon(s) {
 
   const lookup = {
     'desktop': 'bi bi-pc-display-horizontal',
+    'laptop': 'bi bi-laptop',
+    'tablet': 'bi bi-tablet',
     'mobile': 'bi bi-phone',
     'returning': 'bi bi-arrow-repeat',
     'new': 'bi bi-person-plus',
     'normal users': 'bi bi-person-square',
     'headless browsers': 'bi bi-robot',
   };
-  
+
   return lookup[s];
 }
 
