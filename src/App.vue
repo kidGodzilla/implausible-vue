@@ -101,7 +101,7 @@ body:not(.dark) { background-color: #fafafa }
 .pseudotable > div { background: #00000007; padding-right: 6px }
 .shaded a { margin-bottom: -5px; max-width: 65vw }
 body:not(.dark) .shaded a { color: #000; }
-body.dark .shaded a { color: #f3f3f3; }
+body.dark .shaded a { color: #ebebeb; }
 #sankeyChart { height: 500px; width: 100%; }
 .nav-pills { margin-top: -6px }
 .shaded { padding-left: 3px }
