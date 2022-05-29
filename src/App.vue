@@ -95,7 +95,7 @@ body { background-color: #fafafa }
 .dropdown-menu.left.show { z-index: 99999 !important; transform: translate3d(25px, 42px, 0px) !important }
 .dot { margin-left: 16px; margin-right: 4px; transform-origin: center center; transform: scale(4) translateY(-0.85px) }
 .card { box-shadow: 0 1px 3px 0 rgba(0,0,0,.04),0 1px 2px 0 rgba(0,0,0,.02); border: 1px solid rgba(0,0,0,.05) }
-.shaded img { max-height: 18px; max-width: 18px; margin-top: -5px }
+.shaded img { max-height: 18px; max-width: 18px; margin-top: -4px; margin-left: -3px }
 .pseudotable > div { background: #00000007; padding-right: 6px }
 .shaded a { color: #000; margin-bottom: -5px; max-width: 65vw }
 #sankeyChart { height: 500px; width: 100%; }

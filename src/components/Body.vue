@@ -198,25 +198,25 @@ watch(range, getCountryData);
               <small class="text-muted w-495 d-inline-block">Device Type</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <PseudoTable column="device_type" :keyFormatter="capitalizeFirstLetter" />
+              <PseudoTable column="device_type" :iconify="true" :keyFormatter="capitalizeFirstLetter" />
 
               <hr>
 
-              <PseudoTable column="bot" defaultText="Normal Users" :keyFormatter="botFormatter" />
+              <PseudoTable column="bot" :iconify="true" defaultText="Normal Users" :keyFormatter="botFormatter" />
             </div>
 
             <div class="tab-pane fade" id="new">
               <small class="text-muted w-495 d-inline-block">New vs. Returning</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <PseudoTable column="is_new" defaultText="Returning" :keyFormatter="isNewFormatter" />
+              <PseudoTable column="is_new" :iconify="true" defaultText="Returning" :keyFormatter="isNewFormatter" />
             </div>
 
             <div class="tab-pane fade" id="browser">
               <small class="text-muted w-495 d-inline-block">Browser</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <PseudoTable column="browser" />
+              <PseudoTable column="browser" :browserIcons="true" />
             </div>
 
             <div class="tab-pane fade" id="language">
@@ -230,7 +230,7 @@ watch(range, getCountryData);
               <small class="text-muted w-495 d-inline-block">OS</small>
               <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-              <PseudoTable column="os" />
+              <PseudoTable column="os" :osIcons="true" />
             </div>
           </div>
 
