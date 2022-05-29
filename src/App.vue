@@ -105,6 +105,11 @@ body:not(.dark) .shaded a { color: #000; }
 .nav-pills { margin-top: -6px }
 .shaded { padding-left: 3px }
 
+body.dark .nav-link.dropdown-toggle {
+  padding-right: 0;
+  padding-left: 0;
+}
+
 body.dark .svgMap-country { stroke: #ffffff33 }
 body.dark .svgMap-tooltip-content, body.dark .svgMap-tooltip-title {
   color: #222 !important; text-transform: capitalize;
