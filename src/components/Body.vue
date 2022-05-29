@@ -30,7 +30,7 @@ const store = useStore();
 
 const countries = ref({});
 
-const { range, host } = mapGetters();
+const { range, host, dark } = mapGetters();
 
 async function getCountryData() {
   let result = await queryCounts(store, 'country_code', 999);
@@ -76,7 +76,7 @@ watch(range, getCountryData);
 
     <div class="row mt-3">
       <div class="col-md-6">
-        <div class="card min-357">
+        <div class="card min-357" :class="{ 'bg-dark': dark }">
           <div class="card-body">
             <h5 class="card-title float-left" style="margin-bottom: -37px;">Sources</h5>
 
@@ -131,7 +131,7 @@ watch(range, getCountryData);
       </div>
 
       <div class="col-md-6 mt-3 mt-sm-0">
-        <div class="card min-357">
+        <div class="card min-357" :class="{ 'bg-dark': dark }">
           <div class="card-body">
             <h5 class="card-title float-left" style="margin-bottom: -37px;">Pages</h5>
 
@@ -167,7 +167,7 @@ watch(range, getCountryData);
     <div class="row mt-3">
       <div class="col-md-6">
         <Card title="Countries">
-          <SvgMap :countries="countries" />
+          <SvgMap :countries="countries" :dark="dark" />
         </Card>
       </div>
 

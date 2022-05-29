@@ -17,10 +17,12 @@ export default createStore({
             range: '1',
             rangeString: 'Latest',
             liveVisitors: 0,
+            dark: false,
         }
     },
     getters: {
         domains: state => state.domains,
+        dark: state => state.dark,
         key: state => state.key,
         publicKey: state => state.publicKey,
         host: state => state.host,
@@ -31,6 +33,9 @@ export default createStore({
         liveVisitors: state => state.liveVisitors,
     },
     mutations: {
+        setDark (state, bool) {
+            state.dark = bool;
+        },
         setKey (state, key) {
             state.key = key;
         },

@@ -16,15 +16,18 @@ export default {
     countries: {
       type: Object
     },
+    dark: {
+      type: Boolean
+    }
   },
 
   methods: {
     createMap() {
       new svgMap({
         targetElementID: this.id,
-        colorMax: '#3459E6',
+        colorMax: this.dark ? '#4c9be8' : '#3459E6',
         colorMin: '#c7d2fc',
-        colorNoData: '#E2E2E2',
+        colorNoData: this.dark ? 'rgb(78, 93, 108)' : '#E2E2E2',
         data: {
           data: {
             visitors: {
@@ -40,14 +43,19 @@ export default {
     }
   },
 
-  mounted() {
-    // console.log('svg-map mounted', this.id);
+  computed: {
+    bundle() {
+      let { countries, dark } = this;
+      return { countries, dark };
+    }
+  },
 
+  mounted() {
     this.createMap()
   },
 
   watch: {
-    countries (val) {
+    bundle(val) {
       // console.log('svg-map watch countries', val);
       // console.log('iht', this.$refs.svgMap);
       this.$refs.svgMap.innerHTML = '';

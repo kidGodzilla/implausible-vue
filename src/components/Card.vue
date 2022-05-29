@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue'
+import { mapGetters } from '../store/map-state';
+const { dark } = mapGetters();
 
 defineProps({
   header: String,
@@ -12,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="card min-357">
+  <div class="card min-357" :class="{ 'bg-dark': dark }">
     <div class="card-header" v-if="header">
       <slot name="header">
         {{ header }}

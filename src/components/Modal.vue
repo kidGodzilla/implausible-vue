@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { mapGetters } from '../store/map-state';
 
-const { key, publicKey } = mapGetters();
+const { key, publicKey, dark } = mapGetters();
 
 let server = 'https://analytics.servers.do' || `${ location.protocol }//${ location.host }`;
 let encryption_string = computed(() => publicKey.value ? `&lt;script>window.__analytics_encryption_key = '${ publicKey.value }';&lt;/script>\n` : '');
@@ -17,7 +17,7 @@ function formatString(text) {
 <template>
   <div class="modal" id="embedScript" tabindex="-1">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
+      <div class="modal-content" :class="{ 'bg-dark': dark }">
         <div class="modal-header">
           <h5 class="modal-title">Add to your Website</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
