@@ -56,7 +56,7 @@ function setHost(domain) {
       </ul>
 
       <span class="text-success d-none d-md-inline-block dot">·</span>
-      <span class="current-visitors d-none d-md-inline-block"> {{ liveVisitors ? `${ liveVisitors } visitor${ liveVisitors==1? '' : 's' }` : 'No current visitors' }}</span>
+      <span class="current-visitors d-none d-md-inline-block">&nbsp; {{ liveVisitors ? `${ liveVisitors } visitor${ liveVisitors==1? '' : 's' }` : 'No current visitors' }}</span>
     </div>
 
     <div class="col-6">
