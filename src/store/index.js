@@ -16,6 +16,7 @@ export default createStore({
             end: daysAgo(0),
             range: '1',
             rangeString: 'Latest',
+            liveVisitors: 0,
         }
     },
     getters: {
@@ -27,6 +28,7 @@ export default createStore({
         end: state => state.end,
         range: state => state.range,
         rangeString: state => state.rangeString,
+        liveVisitors: state => state.liveVisitors,
     },
     mutations: {
         setKey (state, key) {
@@ -46,6 +48,9 @@ export default createStore({
         },
         setEnd (state, end) {
             state.end = end;
+        },
+        setLiveVisitors (state, count) {
+            state.liveVisitors = count;
         },
         setRangeString (state, rangeString) {
             state.rangeString = rangeString;

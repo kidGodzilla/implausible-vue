@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useStore } from 'vuex';
-import { query, whereClauseComponents } from "../store/query-utils";
+import { query, whereClauseComponents, isoDate } from "../store/query-utils";
 import AreaChart from '../vue-morris/components/area-chart.vue'
 const store = useStore();
 
@@ -39,6 +39,14 @@ async function fetchData() {
   lineData.value = result;
   loading.value = false;
 
+  // Fetch "current visitors" and update store
+  const live_visitors = `SELECT hour, count(*) FROM visits${ whereClauseComponents(store, 1) } AND date = '${ isoDate() }' GROUP BY hour`;
+  const live_result = await query(live_visitors);
+  const last_result = live_result.pop();
+  // console.log('live_visitors', live_visitors, live_result, last_result);
+  let live_visitor_count = 0;
+  if (last_result) live_visitor_count = last_result['count(*)'];
+  store.commit('setLiveVisitors', live_visitor_count);
 }
 
 onMounted(fetchData);

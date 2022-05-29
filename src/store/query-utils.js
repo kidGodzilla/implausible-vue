@@ -62,13 +62,13 @@ export async function query(string) {
     return result;
 }
 
-function isoDate(d) {
+export function isoDate(d) {
     if (!d) d = new Date();
     if (typeof d !== 'object' || !d.toISOString) d = new Date(d);
     return d.toISOString().slice(0,10);
 }
 
-export function whereClauseComponents(store) {
+export function whereClauseComponents(store, skipDates) {
     let components = [];
 
     if (store.state.host) components.push(`host = '${ store.state.host }'`);
@@ -77,7 +77,7 @@ export function whereClauseComponents(store) {
         const encrypted_host = SIV.encrypt(store.state.host).toString();
         components[0] = `(${ components[0] } OR host = '${ encrypted_host }')`;
     }
-    if (store.state.start && store.state.end) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
+    if (store.state.start && store.state.end && !skipDates) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
 
     return (components.length ? ` WHERE ` : '') + (components.join(' AND ') || '');
 }
