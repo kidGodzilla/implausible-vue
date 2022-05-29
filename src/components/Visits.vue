@@ -13,7 +13,7 @@ const loading = ref(true);
 const hourly = computed(() => Math.floor(start.value / 10000) === Math.floor(end.value / 10000));
 const xkey = computed(() => !!hourly.value ? 'hour' : 'date');
 
-const dateFormat = (x) => !!hourly.value ? new Date(x).toString() : new Date(x).toLocaleString().split(',')[0]
+const dateFormat = (x) => !!hourly.value ? new Date(x).toLocaleString() : new Date(x).toLocaleDateString();
 
 async function fetchData() {
   if (!host.value) {
