@@ -38,7 +38,7 @@ watch(is_dark, () => {
         </ul>
       </div>
 
-      <div class="form-check form-switch float-right">
+      <div class="d-none d-md-inline-block form-check form-switch float-right">
         <input class="form-check-input" type="checkbox" id="themer" v-model="is_dark">
         <label class="form-check-label" for="themer" style="user-select: none" :class="{ 'text-white': !is_dark }">Dark mode</label>
       </div>
