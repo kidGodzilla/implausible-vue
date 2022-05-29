@@ -6,7 +6,7 @@ const { key, publicKey, dark } = mapGetters();
 
 let server = 'https://analytics.servers.do' || `${ location.protocol }//${ location.host }`;
 let encryption_string = computed(() => publicKey.value ? `&lt;script>window.__analytics_encryption_key = '${ publicKey.value }';&lt;/script>\n` : '');
-const script_text = computed(() => formatString(`&lt;!-- Implausible Analytics -->\n${ encryption_string.value }&lt;script src='${ server }/a.js'>&lt;/script>`));
+const script_text = computed(() => formatString(`&lt;!-- Servers.do Analytics -->\n${ encryption_string.value }&lt;script src='${ server }/a.js'>&lt;/script>`));
 const url_text = computed(() => `${ server }?key=${ encodeURIComponent(key.value) }&pkey=${ publicKey.value }`);
 
 function formatString(text) {

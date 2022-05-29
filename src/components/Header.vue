@@ -25,7 +25,7 @@ watch(is_dark, () => {
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark" :class="{ 'mt-1': is_dark, 'bg-primary': !is_dark }">
     <div class="container">
-      <a class="navbar-brand" href="/">Implausible Analytics</a>
+      <a class="navbar-brand" href="/">Website Analytics</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
