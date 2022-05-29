@@ -33,7 +33,7 @@ watch(is_dark, () => {
       <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link cp" data-bs-toggle="modal" data-bs-target="#embedScript">Add to your Website</a>
+            <a class="nav-link cp" :class="{ 'btn-dark': is_dark, 'nudge': is_dark }" data-bs-toggle="modal" data-bs-target="#embedScript">Add to your Website</a>
           </li>
         </ul>
       </div>

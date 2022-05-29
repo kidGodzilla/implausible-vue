@@ -105,9 +105,21 @@ body:not(.dark) .shaded a { color: #000; }
 .nav-pills { margin-top: -6px }
 .shaded { padding-left: 3px }
 
+.nav.nav-pills.mb-1 {
+  position: relative;
+  top: 1px;
+}
 body.dark .nav-link.dropdown-toggle {
   padding-right: 0;
   padding-left: 0;
+}
+.form-switch .form-check-input { position: relative; top: 1px; }
+.nudge {
+  border-radius: 3px !important;
+  padding-right: 1rem !important;
+  padding-left: 1rem !important;
+  position: relative;
+  top: 2px;
 }
 
 body.dark .svgMap-country { stroke: #ffffff33 }
