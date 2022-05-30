@@ -54,7 +54,6 @@ async function getValue() {
     const sql = `SELECT AVG(x.MaxValue) FROM (SELECT ip, max(session_length) as MaxValue from visits${whereClause} GROUP BY ip) x`;
     let result = await query(sql);
     stat.value = fmtMSS(result[0]['AVG(x.MaxValue)']) || 0;
-
   }
 }
 
