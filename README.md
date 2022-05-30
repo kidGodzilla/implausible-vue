@@ -41,3 +41,4 @@ These may not be as useful to other people as the original author.
 - [x] Summarize data monthly to save space
 - [ ] Previous month (summary) view
 - [ ] 12-month view
+- [ ] Composite indexes
