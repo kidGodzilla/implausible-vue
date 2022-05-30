@@ -65,10 +65,37 @@ export default createStore({
                 '-1': ['Yesterday', 1, 1],
                 '1': ['Latest', 0, 0],
                 '7': ['Last 7 Days', 7, 0],
+                '14': ['1 week ago', 14, 7],
+                '21': ['2 weeks ago', 21, 14],
+                '28': ['3 weeks ago', 28, 21],
                 '30': ['Last 30 Days', 30, 0]
             };
 
-            const values = ranges[range || '1'];
+            let values = ranges[range || '1'];
+
+            // SQL-based ranges
+            // Daily: -2,-3,-4,-5,-6,-7..-31
+            // Weekly: 7, 14, 21, 28
+
+            // Summarized ranges
+            // Monthly: 2022-05
+            // Annual: 2022
+
+            // Daily: -2,-3,-4,-5,-6,-7..-31
+            if (range < -1 && range > -32) {
+                let val = range * -1;
+                values = [`${ new Date(daysAgo(val)).toDateString() }`, val, val];
+            }
+
+            // Monthly: 2022-05
+            if (range.length === 7) {
+                // Todo
+            }
+
+            // Annual: 2022
+            if (range > 1000 && range < 3000) {
+                // Todo
+            }
 
             state.rangeString = values[0];
             state.start = daysAgo(values[1]);
