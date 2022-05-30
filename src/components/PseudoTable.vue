@@ -38,11 +38,10 @@ async function getData() {
   loading.value = false;
 }
 
-function inferBrowserIcon(s) {
+function inferBrowserIcon(s, size = 48, browser = 'web') {
   const browsers = 'avant,basilisk,brave,browsh,chrome,chromium,deno,dolphin,edge,electron,epic,falkon,firefox,geckoview,hermes,icecat,jsdom,konqueror,maxthon,midori,netsurf,node.js,nw.js,opera,otter,puffin,qutebrowser,safari,seamonkey,servo,silk,spidermonkey,tor,uc,v8,vivaldi,web,webkit,yandex'.split(',');
   const sizes = '16,24,32,48,64,128,256,512'.split(',');
   const arr = s.toLowerCase().trim().split(' ');
-  let browser = 'web', size = sizes[3];
   let intersection = browsers.filter(value => arr.includes(value));
   if (intersection.length) browser = intersection[0];
 
