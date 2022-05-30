@@ -37,6 +37,7 @@ These may not be as useful to other people as the original author.
 - [x] Add dark mode
 - [x] Display "current visitors" in the last 1 hour
 - [x] Add deterministic encryption to the public database
-- [x] Clean data in visits table older than ~30 days
-- [ ] Summarize data weekly to save space
+- [x] Clean data in visits table older than ~32 days
+- [x] Summarize data monthly to save space
+- [ ] Previous month (summary) view
 - [ ] 12-month view
