@@ -26,7 +26,7 @@ function formatString(text) {
           <h5>Embed Code</h5>
           <p>Embed this script on your website, and your analytics data will appear here.</p>
           <p>
-            <textarea rows="3" spellcheck="false" class="form-control" id="script" data-clipboard-target="#script" style="resize: none; font-family: monospace">{{ script_text }}</textarea>
+            <textarea rows="4" spellcheck="false" class="form-control" id="script" data-clipboard-target="#script" style="resize: none; font-family: monospace">{{ script_text }}</textarea>
             <small class="d-block mt-1">
               <a class="cp" data-clipboard-target="#script">Copy to clipboard</a>
               <span class="d-none">&nbsp;Copied!</span>
