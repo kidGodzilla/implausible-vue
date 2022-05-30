@@ -89,12 +89,12 @@ export default createStore({
 
             // Monthly: 2022-05
             if (range.length === 7) {
-                // Todo
+                values = [`${ range }`, range, range];
             }
 
             // Annual: 2022
             if (range > 1000 && range < 3000) {
-                // Todo
+                values = [`${ range }`, range, range];
             }
 
             state.rangeString = values[0];
