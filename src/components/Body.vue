@@ -9,7 +9,7 @@ import SvgMap from '../components/svgMap.vue'
 // Formatters
 const twoPlaces = v => v.toFixed(2);
 const twoPlacesMinZero = v => Math.max(0, v.toFixed(2));
-const capitalizeFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
+const capitalizeFirstLetter = s => (s || '').charAt(0).toUpperCase() + (s || '').slice(1);
 const isNewFormatter = v => v ? 'New' : 'Returning';
 const botFormatter = v => v ? 'Headless Browsers' : 'Normal Users';
 
@@ -22,7 +22,7 @@ const languageLookup = str => {
   return s + ' (' + str + ')';
 }
 
-import { queryCounts } from '../store/query-utils';
+import { queryCounts, querySummary } from '../store/query-utils';
 import { mapGetters } from '../store/map-state';
 import { useStore } from 'vuex';
 import {onMounted, ref, watch} from 'vue';
@@ -30,11 +30,28 @@ const store = useStore();
 
 const countries = ref({});
 
-const { range, host, dark } = mapGetters();
+const { range, host, dark, summary } = mapGetters();
 
 async function getCountryData() {
+  if (range.value.length === 7 || range.value > 1000) {
+    let summary_value = JSON.parse(JSON.stringify(summary.value));
+    let countries_value = summary_value.countries;
+
+    if (countries_value) {
+      let newCountries = {};
+
+      Object.keys(countries_value).forEach(key => {
+        newCountries[key] = { visitors: countries_value[key] }
+      });
+
+      countries.value = newCountries;
+    }
+
+    return;
+  }
+
   let result = await queryCounts(store, 'country_code', 999);
-  // console.log('result', result);
+
   let newCountries = {};
 
   result.forEach(row => {
@@ -43,13 +60,21 @@ async function getCountryData() {
     };
   });
 
-  // console.log('newCountries', newCountries)
   countries.value = newCountries;
 }
 
+function getSummaryData() {
+  if (typeof range.value === 'string' && range.value.length === 7) querySummary(store, range.value);
+  else if (range.value > 1000 && range.value < 3000) querySummary(store, range.value);
+}
+
 onMounted(getCountryData);
+onMounted(getSummaryData);
 watch(host, getCountryData);
+watch(host, getSummaryData);
 watch(range, getCountryData);
+watch(range, getSummaryData);
+watch(summary, getCountryData);
 </script>
 
 <template>
