@@ -7,7 +7,9 @@ const store = useStore();
 
 const props = defineProps({
   title: String,
-})
+  underline: Boolean,
+  muted: { type: Boolean, default: true },
+});
 
 let stat = ref('-');
 const { host, range, summary } = mapGetters();
@@ -82,8 +84,13 @@ watch(summary, getValue);
 </script>
 
 <template>
-  <div class="col-6 col-md-3">
-    <h6 class="card-subtitle mb-2 text-muted">{{ title }}</h6>
+  <div class="col-6 col-md-3" >
+    <h6 class="card-subtitle mb-2" :class="{ 'text-muted': muted, 'text-decoration-underline': underline, 'link-color': underline }">{{ title }}</h6>
     <h4 class="card-title">{{ stat }}</h4>
   </div>
 </template>
+
+<style>
+body.dark .link-color { color: #4c9be8 !important; cursor: pointer; user-select: none; }
+.link-color { color: #3459e6 !important; cursor: pointer; user-select: none; }
+</style>

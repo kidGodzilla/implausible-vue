@@ -5,6 +5,10 @@ import { query, whereClauseComponents, isoDate } from "../store/query-utils";
 import AreaChart from '../vue-morris/components/area-chart.vue'
 const store = useStore();
 
+const props = defineProps({
+  visitors: Boolean
+});
+
 import { mapGetters } from '../store/map-state'
 let { start, end, host, range, summary } = mapGetters();
 const lineData = ref([]);
@@ -24,12 +28,12 @@ async function fetchData() {
     let data = [];
 
     let summary_value = JSON.parse(JSON.stringify(summary.value));
-    let { pageviewsTimeseries } = summary_value;
+    let { pageviewsTimeseries, visitorsTimeseries } = summary_value;
 
-    if (!pageviewsTimeseries) return;
+    if (!pageviewsTimeseries || !pageviewsTimeseries) return;
 
-    Object.keys(pageviewsTimeseries).forEach(key => {
-      data.push({ date: key, value: pageviewsTimeseries[key] });
+    Object.keys(props.visitors ?visitorsTimeseries : pageviewsTimeseries).forEach(key => {
+      data.push({ date: key, value: (props.visitors ?visitorsTimeseries : pageviewsTimeseries)[key] });
     });
 
     lineData.value = data;
@@ -40,7 +44,7 @@ async function fetchData() {
 
   const whereClause = whereClauseComponents(store);
   let whereClauseLast = whereClause.split(' ').pop().replace(`'`, '').replace(`'`, '');
-  let count = 'count(*)' || 'count(DISTINCT ip)';
+  let count = props.visitors ? 'count(DISTINCT ip)' : 'count(*)';
   let token = hourly.value ? 'hour' : 'date';
 
   const sql = `SELECT ${ token }, ${ count } FROM visits${whereClause} GROUP BY ${ token } ORDER BY ${ token } ASC;`;
@@ -50,7 +54,8 @@ async function fetchData() {
 
   result.forEach(row => {
     if (!!hourly.value) row.hour = + new Date(`${ whereClauseLast }T${ row.hour < 10 ? '0':'' }${ row.hour }:00:00Z`);
-    row.value = row['count(*)'];
+    row.value = row['count(DISTINCT ip)'] || row['count(*)'];
+    delete row['count(DISTINCT ip)'];
     delete row['count(*)'];
   });
   // console.log('visits fetchData', result);
@@ -71,6 +76,7 @@ onMounted(fetchData);
 watch(host, fetchData);
 watch(range, fetchData);
 watch(summary, fetchData);
+watch(props, fetchData);
 </script>
 
 <template>
@@ -80,7 +86,7 @@ watch(summary, fetchData);
     <area-chart
         v-else
         id="line" :data="lineData" :xkey="xkey" ykey="value" resize="true"
-        labels='[ "Visits" ]' line-color="#2847b7" fill-opacity="0.16"
+        :labels='visitors ? `[ "Visitors" ]` : `[ "Pageviews" ]`' line-color="#2847b7" fill-opacity="0.16"
         line-width="4" :dateFormat="dateFormat"
         grid="true" grid-text-weight="bold">
     </area-chart>

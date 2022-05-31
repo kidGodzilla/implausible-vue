@@ -29,6 +29,7 @@ import {onMounted, ref, watch} from 'vue';
 const store = useStore();
 
 const countries = ref({});
+const showVisitors = ref(true);
 
 const { range, host, dark, summary } = mapGetters();
 
@@ -87,13 +88,13 @@ watch(summary, getCountryData);
         <Card>
 
           <div class="row">
-            <Stat title="Visitors" />
-            <Stat title="Total Pageviews" />
+            <Stat title="Visitors" :muted="false" :underline="!showVisitors" @click="showVisitors = true" />
+            <Stat title="Total Pageviews" :muted="false" :underline="showVisitors" @click="showVisitors = false" />
             <Stat title="Bounce Rate" />
             <Stat title="Session Length" />
           </div>
 
-          <Visits />
+          <Visits :visitors="showVisitors" />
 
         </Card>
       </div>
