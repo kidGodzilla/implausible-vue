@@ -6,11 +6,11 @@ import AreaChart from '../vue-morris/components/area-chart.vue'
 const store = useStore();
 
 import { mapGetters } from '../store/map-state'
-let { start, end, host, range } = mapGetters();
+let { start, end, host, range, summary } = mapGetters();
 const lineData = ref([]);
 const loading = ref(true);
 
-const hourly = computed(() => Math.floor(start.value / 10000) === Math.floor(end.value / 10000));
+const hourly = computed(() => range.value < 2);
 const xkey = computed(() => !!hourly.value ? 'hour' : 'date');
 
 const dateFormat = (x) => !!hourly.value ? new Date(x).toLocaleString() : new Date(x).toLocaleDateString();
@@ -20,12 +20,30 @@ async function fetchData() {
     return loading.value = false;
   }
 
+  if (range.value.length === 7 || range.value > 1000) {
+    let data = [];
+
+    let summary_value = JSON.parse(JSON.stringify(summary.value));
+    let { pageviewsTimeseries } = summary_value;
+
+    if (!pageviewsTimeseries) return;
+
+    Object.keys(pageviewsTimeseries).forEach(key => {
+      data.push({ date: key, value: pageviewsTimeseries[key] });
+    });
+
+    lineData.value = data;
+    loading.value = false;
+
+    return;
+  }
+
   const whereClause = whereClauseComponents(store);
   let whereClauseLast = whereClause.split(' ').pop().replace(`'`, '').replace(`'`, '');
-  // console.log('whereClause', whereClause, whereClauseLast);
+  let count = 'count(*)' || 'count(DISTINCT ip)';
+  let token = hourly.value ? 'hour' : 'date';
 
-  const sql = hourly.value ? `SELECT hour, count(*) FROM visits${whereClause} GROUP BY hour ORDER BY hour ASC;`
-                     : `SELECT date, count(*) FROM visits${whereClause} GROUP BY date ORDER BY date ASC;`;
+  const sql = `SELECT ${ token }, ${ count } FROM visits${whereClause} GROUP BY ${ token } ORDER BY ${ token } ASC;`;
   // console.log(sql);
 
   let result = await query(sql);
@@ -52,6 +70,7 @@ async function fetchData() {
 onMounted(fetchData);
 watch(host, fetchData);
 watch(range, fetchData);
+watch(summary, fetchData);
 </script>
 
 <template>
