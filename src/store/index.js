@@ -17,6 +17,7 @@ export default createStore({
             range: '1',
             rangeString: 'Latest',
             liveVisitors: 0,
+            summary: {},
             dark: false,
         }
     },
@@ -31,6 +32,7 @@ export default createStore({
         range: state => state.range,
         rangeString: state => state.rangeString,
         liveVisitors: state => state.liveVisitors,
+        summary: state => state.summary,
     },
     mutations: {
         setDark (state, bool) {
@@ -56,6 +58,9 @@ export default createStore({
         },
         setLiveVisitors (state, count) {
             state.liveVisitors = count;
+        },
+        setSummary (state, o) {
+            state.summary = o;
         },
         setRangeString (state, rangeString) {
             state.rangeString = rangeString;
@@ -100,7 +105,9 @@ export default createStore({
             state.rangeString = values[0];
             state.start = daysAgo(values[1]);
             state.end = daysAgo(values[2]);
-            state.range = range || '1';
+
+            if (parseInt(range) == range) range = parseInt(range);
+            state.range = range || 1;
 
             let targetSearch = `?host=${ state.host }&range=${ range || '1' }`;
             if (location.search !== targetSearch) window.history.pushState('', '', targetSearch);
