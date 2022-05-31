@@ -21,13 +21,48 @@ const { column, iconify, favicons, browserIcons, osIcons, links, linkPrefix, lim
   keyFormatter: Function,
 });
 
-const { host, range } = mapGetters();
+const { host, range, summary } = mapGetters();
 
 const rows = ref([]);
 const maxValue = ref(0);
 const loading = ref(true);
 
 async function getData() {
+  if (range.value.length === 7 || range.value > 1000) {
+    let summary_value = JSON.parse(JSON.stringify(summary.value));
+    let value_name = valueColumn || 'count(*)';
+    let column_name = column;
+
+    if (loadTimes) column_name = 'loadTimes';
+    let values = summary_value[column_name];
+
+    if (values) {
+      let result = [];
+
+      if (loadTimes) {
+        result = values;
+
+      } else {
+        Object.keys(values).forEach(key => {
+          let o = {};
+          if (parseInt(key) == key) key = parseInt(key);
+          if (key == 'null') key = null;
+          o[value_name] = values[key];
+          o[column] = key;
+          result.push(o);
+        });
+      }
+
+      result.sort((b, a) => a[value_name] - b[value_name]);
+
+      rows.value = result;
+      try { maxValue.value = result[0][value_name] } catch(e) { maxValue.value = 0 }
+      loading.value = false;
+    }
+
+    return;
+  }
+
   let result = loadTimes ? await queryLoadTimes(store) : await queryCounts(store, column, limit || 10);
 
   // console.log('result', column, result);
@@ -82,6 +117,7 @@ function addIcon(s) {
 onMounted(getData);
 watch(host, getData);
 watch(range, getData);
+watch(summary, getData);
 </script>
 
 <template>
