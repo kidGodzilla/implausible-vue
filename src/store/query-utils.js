@@ -143,3 +143,47 @@ export async function queryCounts(store, column = 'hour', max = 10) {
 
     return res;
 }
+
+export async function querySummary(store, date) {
+    let sql = `SELECT * FROM summaries${ whereClauseComponents(store, 1) } AND date ${ (date > 1000 && date < 3000) ? 'LIKE' : '=' } '${ date }${ (date > 1000 && date < 3000) ? '-%' : '' }';`;
+    let result = {}, loadTimes = [], res = await query(sql);
+
+    // Merge all data objects
+    res.forEach(row => {
+        let data = JSON.parse(row.data);
+
+        Object.keys(data).forEach(key => {
+            if (typeof data[key] === 'number') {
+                if (!result[key]) result[key] = 0;
+                result[key] += data[key];
+
+            } else if (key === 'loadTimes') {
+                result[key] = [];
+
+                if (!result[key]) result[key] = [];
+
+                loadTimes = loadTimes.concat(data[key]);
+
+                // reduce loadTimes with duplicate pathname as averages
+                let unique_pathnames = loadTimes.map(x => x.pathname).filter((value, index, self) => self.indexOf(value) === index);
+                unique_pathnames.forEach(pathname => {
+                    let matches = loadTimes.filter(x => x.pathname = pathname);
+                    let sum = matches.map(match => match.AvgLoadTime).reduce((a, b) => a + b, 0);
+                    let avg = sum / matches.length;
+
+                    result[key].push({ pathname, AvgLoadTime: avg });
+                });
+
+            } else if (typeof data[key] === 'object') {
+                if (!result[key]) result[key] = {};
+
+                Object.keys(data[key]).forEach(k => {
+                    if (!result[key][k]) result[key][k] = 0;
+                    result[key][k] += data[key][k];
+                });
+            }
+        });
+    });
+
+    store.commit('setSummary', result);
+}
