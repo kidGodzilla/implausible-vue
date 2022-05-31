@@ -10,7 +10,7 @@ const props = defineProps({
 })
 
 let stat = ref('-');
-const { host, range } = mapGetters();
+const { host, range, summary } = mapGetters();
 
 // Visitors: SELECT count(DISTINCT ip) from visits
 // Pageviews: SELECT count(*) from VISITS whereclause
@@ -26,6 +26,24 @@ function fmtMSS(s) { return(s-(s%=60))/60+('m ')+parseInt(s) }
 
 async function getValue() {
   if (!store.state.host) return;
+
+  if (range.value.length === 7 || range.value > 1000) {
+
+    if (props.title === 'Visitors') {
+      stat.value = summary.value.visitors;
+
+    } else if (props.title === 'Total Pageviews') {
+      stat.value = summary.value.pageviews;
+
+    } else if (props.title === 'Bounce Rate') {
+      stat.value = percentFormatter(summary.value.bounceRate);
+
+    } else if (props.title === 'Session Length') {
+      stat.value = fmtMSS(summary.value.sessionLength);
+    }
+
+    return;
+  }
 
   const whereClause = whereClauseComponents(store);
 
@@ -60,6 +78,7 @@ async function getValue() {
 onMounted(getValue);
 watch(host, getValue);
 watch(range, getValue);
+watch(summary, getValue);
 </script>
 
 <template>
