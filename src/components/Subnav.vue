@@ -68,6 +68,10 @@ function setHost(domain) {
             <a class="dropdown-item cp" @click="setRange(-1)">Yesterday</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item cp" @click="setRange(7)">Last 7 Days</a>
+            <a class="dropdown-item cp" @click="setRange(14)">1 week ago</a>
+            <a class="dropdown-item cp" @click="setRange(21)">2 weeks ago</a>
+            <a class="dropdown-item cp" @click="setRange(28)">3 weeks ago</a>
+            <div class="dropdown-divider"></div>
             <a class="dropdown-item cp" @click="setRange(30)">Last 30 Days</a>
           </div>
         </li>
