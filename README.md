@@ -39,6 +39,6 @@ These may not be as useful to other people as the original author.
 - [x] Add deterministic encryption to the public database
 - [x] Clean data in visits table older than ~32 days
 - [x] Summarize data monthly to save space
-- [ ] Previous month (summary) view
+- [x] Previous month (summary) view
 - [ ] 12-month view
 - [ ] Composite indexes
