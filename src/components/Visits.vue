@@ -82,7 +82,7 @@ watch(showVisitors, fetchData);
     <area-chart
         v-else
         id="line" :data="lineData" :xkey="xkey" ykey="value" resize="true"
-        :labels='visitors ? `[ "Visitors" ]` : `[ "Pageviews" ]`' line-color="#2847b7" fill-opacity="0.16"
+        :labels='showVisitors ? `[ "Visitors" ]` : `[ "Pageviews" ]`' line-color="#2847b7" fill-opacity="0.16"
         line-width="4" :dateFormat="dateFormat"
         grid="true" grid-text-weight="bold">
     </area-chart>
