@@ -39,7 +39,7 @@ const visitorsString = computed(() => {
 async function getCountryData() {
   if (range.value.length === 7 || range.value > 1000) {
     let summary_value = JSON.parse(JSON.stringify(summary.value));
-    let countries_value = summary_value.countries;
+    let countries_value = showVisitors.value ? summary_value.country_code__visitors : summary_value.country_code;
 
     if (countries_value) {
       let newCountries = {};

@@ -1,7 +1,7 @@
 <script setup>
-import {queryCounts, queryLoadTimes} from '../store/query-utils';
-import { mapGetters } from '../store/map-state';
+import { queryCounts, queryLoadTimes, returnDecryptor } from '../store/query-utils';
 import { ref, onMounted, watch, computed } from 'vue';
+import { mapGetters } from '../store/map-state';
 import { useStore } from 'vuex';
 const store = useStore();
 
@@ -21,7 +21,6 @@ const { column, iconify, favicons, browserIcons, osIcons, links, linkPrefix, lim
   keyFormatter: Function,
 });
 
-
 const { host, range, summary, showVisitors } = mapGetters();
 
 const valueColumnActual = computed(() => {
@@ -33,11 +32,12 @@ const maxValue = ref(0);
 const loading = ref(true);
 
 async function getData() {
-  console.log('valueColumnActual', valueColumnActual.value)
+  // console.log('valueColumnActual', valueColumnActual.value)
   if (range.value.length === 7 || range.value > 1000) {
     let summary_value = JSON.parse(JSON.stringify(summary.value));
+    let decryptor = await returnDecryptor(store);
     let value_name = valueColumnActual.value;
-    let column_name = column;
+    let column_name = column + (showVisitors.value ? '__visitors':'');
 
     if (loadTimes) column_name = 'loadTimes';
     let values = summary_value[column_name];
@@ -60,6 +60,11 @@ async function getData() {
       }
 
       result.sort((b, a) => a[value_name] - b[value_name]);
+
+      // Attempt to decrypt
+      result.forEach(item => item[column] = decryptor(item[column]));
+
+      if (result.length > 10) result = result.slice(0, 10);
 
       rows.value = result;
       try { maxValue.value = result[0][value_name] } catch(e) { maxValue.value = 0 }

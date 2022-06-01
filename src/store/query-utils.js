@@ -7,6 +7,20 @@ const randomString = () => Math.random().toString(36).substr(2, 9);
 
 let creatingWorker = 0;
 
+export async function returnDecryptor(store) {
+    const SIV = store.state.key ? CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key)) : null;
+
+    return function decryptor(s) {
+        if (SIV) {
+            try {
+                let decrypted = SIV.decrypt(CryptoJS.enc.Hex.parse(s)).toString(CryptoJS.enc.Utf8);
+                if (decrypted && decrypted != 'false') s = decrypted;
+            } catch(e){}
+        }
+        return s;
+    }
+}
+
 async function createOneWorker() {
     if (window._worker) return window._worker;
 
@@ -123,7 +137,7 @@ export async function queryCounts(store, column = 'hour', max = 10) {
     const SIV = store.state.key ? CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key)) : null;
 
     const columnValue = (store.state.showVisitors ? 'count(DISTINCT ip)' : 'count(*)');
-    console.log('columnValue', columnValue, store.state.showVisitors);
+    // console.log('columnValue', columnValue, store.state.showVisitors);
 
     let isTimeseries = column === 'hour' || column === 'date';
     let orderByValue = isTimeseries ? column : columnValue;

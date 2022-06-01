@@ -38,7 +38,7 @@ async function getValue() {
       stat.value = summary.value.pageviews;
 
     } else if (props.title === 'Bounce Rate') {
-      stat.value = percentFormatter(summary.value.bounceRate);
+      stat.value = percentFormatter(summary.value.onePageVisits / summary.value.visitors);
 
     } else if (props.title === 'Session Length') {
       stat.value = fmtMSS(summary.value.sessionLength);
