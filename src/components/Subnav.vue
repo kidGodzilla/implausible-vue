@@ -76,6 +76,10 @@ function triggerPicker(range) {
   document.querySelector('.dropdown-menu.right.show').classList.remove('show')
   showPicker.value = true;
 
+  setTimeout(() => {
+    document.querySelector('.vuejs3-datepicker__value').click();
+  }, 123);
+
   // document.querySelector('.vuejs3-datepicker__value').click();
 }
 
