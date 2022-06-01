@@ -79,22 +79,8 @@ function triggerPicker(range) {
   setTimeout(() => {
     document.querySelector('.vuejs3-datepicker__value').click();
   }, 123);
-
-  // document.querySelector('.vuejs3-datepicker__value').click();
 }
 
-function handleChangedMonth(payload) {
-  console.log('handleChangedMonth', payload)
-  // let { timestamp } = payload;
-  // let D = new Date(timestamp);
-  // let M = D.getMonth()+1;
-  // setRange(`${ D.getFullYear() }-${ M < 10 ? '0':'' }${ M }`);
-}
-function handleChangedYear(payload) {
-  console.log('handleChangedYear', payload)
-  // let { year } = payload;
-  // setRange(year);
-}
 function handleChangedDay(payload) {
   console.log('handleChangedDay', payload);
 
@@ -158,7 +144,7 @@ function handleChangedDay(payload) {
             <a class="dropdown-item cp" @click="triggerPicker('year');">Custom Year</a>
           </div>
         </li>
-        <datepicker v-if="showPicker" name="datepick" :value="picked" :disabled-dates="minimumView == 'day' ? disabledDates : null" :initial-view="startingView" :minimum-view="minimumView" :maximum-view="maximumView" @input="handleChangedDay" @changedMonth="handleChangedMonth" @changedYear="handleChangedYear"></datepicker>
+        <datepicker v-if="showPicker" name="datepick" :value="picked" :disabled-dates="minimumView == 'day' ? disabledDates : null" :initial-view="startingView" :minimum-view="minimumView" :maximum-view="maximumView" @input="handleChangedDay"></datepicker>
       </ul>
     </div>
   </div>
@@ -166,20 +152,10 @@ function handleChangedDay(payload) {
 
 <style>
 .vuejs3-datepicker {
-  /*opacity: 0.1;*/
   z-index: 9999999;
   min-width: 300px;
-  /*position: absolute;*/
-  /*right: 0;*/
-  /*top: -50px;*/
-  /*position:relative;*/
-  /*left: -120px;*/
-  /*margin-right: -120px;*/
-  /*margin-left: 1rem;*/
 }
-.vuejs3-datepicker__value {
-  width: 300px;
-}
+.vuejs3-datepicker__value { width: 300px; }
 .vuejs3-datepicker__icon { display: none !important }
 .vuejs3-datepicker__value { padding: 8px 10px !important; }
 body.dark .vuejs3-datepicker__value { background: rgb(32,55,76); }
