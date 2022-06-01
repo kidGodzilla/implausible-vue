@@ -15,7 +15,10 @@ const chartDate = ref(null);
 const hourly = computed(() => range.value < 2);
 const xkey = computed(() => !!hourly.value ? 'hour' : 'date');
 
-const dateFormat = (x) => !!hourly.value ? new Date(x).toLocaleString() : new Date(x).toLocaleDateString();
+const dateFormat = (x) => !!hourly.value ? new Date(x).toLocaleString() : `${ new Date(x).toLocaleString(navigator.language || 'en-us', { weekday: 'long' }) },\n${ new Date(x).toLocaleDateString() }`;
+// ${ new Date(x).toLocaleString(navigator.language || 'en-us', { weekday: 'long' }) }
+
+const labelFormat = (x) => !!hourly.value ? (new Date(x).toLocaleString().split(',')[1] || new Date(x).toLocaleString().split(' ')[1] || new Date(x).toLocaleString()) : `${ new Date(x).toLocaleString(navigator.language || 'en-us', { weekday: 'long' }) },\n${ new Date(x).toLocaleDateString() }`;
 
 async function fetchData() {
   if (!host.value) {
@@ -105,7 +108,7 @@ watch(showVisitors, fetchData);
         v-else
         id="line" :data="lineData" :xkey="xkey" ykey="value" resize="true"
         :labels='showVisitors ? `[ "Visitors" ]` : `[ "Pageviews" ]`' line-color="#2847b7" fill-opacity="0.16"
-        line-width="4" :dateFormat="dateFormat" :smooth="false" :xLabelAngle="45"
+        line-width="4" :xLabelFormat="labelFormat" :dateFormat="dateFormat" :smooth="false" :xLabelAngle="45"
         :hoverCallback="hoverCallback" @click="chartClick"
         grid="true" grid-text-weight="bold">
     </area-chart>
