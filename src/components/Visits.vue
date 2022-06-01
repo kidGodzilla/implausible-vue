@@ -10,6 +10,8 @@ let { start, end, host, range, summary, showVisitors } = mapGetters();
 const lineData = ref([]);
 const loading = ref(true);
 
+const chartDate = ref(null);
+
 const hourly = computed(() => range.value < 2);
 const xkey = computed(() => !!hourly.value ? 'hour' : 'date');
 
@@ -68,6 +70,26 @@ async function fetchData() {
   store.commit('setLiveVisitors', live_visitor_count);
 }
 
+function hoverCallback (index, options, content, row) {
+  if (row.date) chartDate.value = row.date;
+  return(content);
+}
+
+function setRange(v, show) {
+  store.commit('setRange', v);
+}
+
+function chartClick() {
+  console.log('chart clicked', chartDate.value);
+
+  // Navigate to date if in range
+  if (chartDate.value) {
+    let diff = new Date() - new Date(chartDate.value);
+    let r = Math.floor(diff / 86400000) * -1;
+    if (r > -33 && r < 2) setRange(r);
+  }
+}
+
 onMounted(fetchData);
 watch(host, fetchData);
 watch(range, fetchData);
@@ -83,7 +105,8 @@ watch(showVisitors, fetchData);
         v-else
         id="line" :data="lineData" :xkey="xkey" ykey="value" resize="true"
         :labels='showVisitors ? `[ "Visitors" ]` : `[ "Pageviews" ]`' line-color="#2847b7" fill-opacity="0.16"
-        line-width="4" :dateFormat="dateFormat"
+        line-width="4" :dateFormat="dateFormat" :smooth="false" :xLabelAngle="45"
+        :hoverCallback="hoverCallback" @click="chartClick"
         grid="true" grid-text-weight="bold">
     </area-chart>
   </div>
