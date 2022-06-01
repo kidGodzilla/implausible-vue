@@ -82,7 +82,7 @@ function triggerPicker(range) {
 }
 
 function handleChangedDay(payload) {
-  console.log('handleChangedDay', payload);
+  // console.log('handleChangedDay', payload);
 
   if (startingView.value === 'year') {
     let D = new Date(payload);
