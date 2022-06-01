@@ -176,9 +176,8 @@ function handleChangedDay(payload) {
 .vuejs3-datepicker__value {
   width: 300px;
 }
-.vuejs3-datepicker__icon { display: none }
-.vuejs3-datepicker__value { padding: 8px 10px; }
+.vuejs3-datepicker__icon { display: none !important }
+.vuejs3-datepicker__value { padding: 8px 10px !important; }
 body.dark .vuejs3-datepicker__value { background: rgb(32,55,76); }
-.vuejs3-datepicker__content {  }
 body.dark .vuejs3-datepicker__calendar-actionarea { background: rgb(32,55,76) }
 </style>
