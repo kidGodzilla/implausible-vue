@@ -5,12 +5,8 @@ import { query, whereClauseComponents, isoDate } from "../store/query-utils";
 import AreaChart from '../vue-morris/components/area-chart.vue'
 const store = useStore();
 
-const props = defineProps({
-  visitors: Boolean
-});
-
 import { mapGetters } from '../store/map-state'
-let { start, end, host, range, summary } = mapGetters();
+let { start, end, host, range, summary, showVisitors } = mapGetters();
 const lineData = ref([]);
 const loading = ref(true);
 
@@ -32,8 +28,8 @@ async function fetchData() {
 
     if (!pageviewsTimeseries || !pageviewsTimeseries) return;
 
-    Object.keys(props.visitors ?visitorsTimeseries : pageviewsTimeseries).forEach(key => {
-      data.push({ date: key, value: (props.visitors ?visitorsTimeseries : pageviewsTimeseries)[key] });
+    Object.keys(showVisitors.value ?visitorsTimeseries : pageviewsTimeseries).forEach(key => {
+      data.push({ date: key, value: (showVisitors.value ?visitorsTimeseries : pageviewsTimeseries)[key] });
     });
 
     lineData.value = data;
@@ -44,7 +40,7 @@ async function fetchData() {
 
   const whereClause = whereClauseComponents(store);
   let whereClauseLast = whereClause.split(' ').pop().replace(`'`, '').replace(`'`, '');
-  let count = props.visitors ? 'count(DISTINCT ip)' : 'count(*)';
+  let count = showVisitors.value ? 'count(DISTINCT ip)' : 'count(*)';
   let token = hourly.value ? 'hour' : 'date';
 
   const sql = `SELECT ${ token }, ${ count } FROM visits${whereClause} GROUP BY ${ token } ORDER BY ${ token } ASC;`;
@@ -76,7 +72,7 @@ onMounted(fetchData);
 watch(host, fetchData);
 watch(range, fetchData);
 watch(summary, fetchData);
-watch(props, fetchData);
+watch(showVisitors, fetchData);
 </script>
 
 <template>

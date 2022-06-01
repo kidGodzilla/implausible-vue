@@ -29,9 +29,8 @@ import {onMounted, ref, watch} from 'vue';
 const store = useStore();
 
 const countries = ref({});
-const showVisitors = ref(true);
 
-const { range, host, dark, summary } = mapGetters();
+const { range, host, dark, summary, showVisitors } = mapGetters();
 
 async function getCountryData() {
   if (range.value.length === 7 || range.value > 1000) {
@@ -88,13 +87,13 @@ watch(summary, getCountryData);
         <Card>
 
           <div class="row">
-            <Stat title="Visitors" :muted="false" :underline="!showVisitors" @click="showVisitors = true" />
-            <Stat title="Total Pageviews" :muted="false" :underline="showVisitors" @click="showVisitors = false" />
+            <Stat title="Visitors" :muted="false" :underline="!showVisitors" @click="store.commit('setShowVisitors', true)" />
+            <Stat title="Total Pageviews" :muted="false" :underline="showVisitors" @click="store.commit('setShowVisitors', false)" />
             <Stat title="Bounce Rate" />
             <Stat title="Session Length" />
           </div>
 
-          <Visits :visitors="showVisitors" />
+          <Visits />
 
         </Card>
       </div>

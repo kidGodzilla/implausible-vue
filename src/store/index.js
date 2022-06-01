@@ -17,6 +17,7 @@ export default createStore({
             range: '1',
             rangeString: 'Latest',
             liveVisitors: 0,
+            showVisitors: true,
             summary: {},
             dark: false,
         }
@@ -32,6 +33,7 @@ export default createStore({
         range: state => state.range,
         rangeString: state => state.rangeString,
         liveVisitors: state => state.liveVisitors,
+        showVisitors: state => state.showVisitors,
         summary: state => state.summary,
     },
     mutations: {
@@ -59,6 +61,9 @@ export default createStore({
         setLiveVisitors (state, count) {
             state.liveVisitors = count;
         },
+        setShowVisitors (state, bool) {
+            state.showVisitors = bool;
+        },
         setSummary (state, o) {
             state.summary = o;
         },
@@ -78,14 +83,6 @@ export default createStore({
             };
 
             let values = ranges[range];
-
-            // SQL-based ranges
-            // Daily: -2,-3,-4,-5,-6,-7..-31
-            // Weekly: 7, 14, 21, 28
-
-            // Summarized ranges
-            // Monthly: 2022-05
-            // Annual: 2022
 
             // Daily: -2,-3,-4,-5,-6,-7..-31
             if (range < -1 && range > -32) {
