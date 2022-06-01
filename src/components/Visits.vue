@@ -18,12 +18,17 @@ const xkey = computed(() => !!hourly.value ? 'hour' : 'date');
 const dateFormat = (x) => !!hourly.value ? new Date(x).toLocaleString() : `${ new Date(x).toLocaleString(navigator.language || 'en-us', { weekday: 'long' }) },\n${ new Date(x).toLocaleDateString() }`;
 // ${ new Date(x).toLocaleString(navigator.language || 'en-us', { weekday: 'long' }) }
 
-const labelFormat = (x) => !!hourly.value ? (new Date(x).toLocaleString().split(',')[1] || new Date(x).toLocaleString().split(' ')[1] || new Date(x).toLocaleString()) : `${ new Date(x).toLocaleString(navigator.language || 'en-us', { weekday: 'long' }) },\n${ new Date(x).toLocaleDateString() }`;
+const labelFormat = (x, i) => !!hourly.value ? (new Date(x).toLocaleString().split(',')[1] || new Date(x).toLocaleString().split(' ')[1] || new Date(x).toLocaleString()) : `${ new Date(x).toLocaleString(navigator.language || 'en-us', { weekday: 'long' }) },\n${ new Date(x).toLocaleDateString() }`;
+
+const xLabel = ref('day');
 
 async function fetchData() {
   if (!host.value) {
     return loading.value = false;
   }
+
+  if (range.value > 1000) xLabel.value = 'month';
+  else xLabel.value = hourly.value ? 'hour' : 'day';
 
   if (range.value.length === 7 || range.value > 1000) {
     let data = [];
@@ -108,7 +113,8 @@ watch(showVisitors, fetchData);
         v-else
         id="line" :data="lineData" :xkey="xkey" ykey="value" resize="true"
         :labels='showVisitors ? `[ "Visitors" ]` : `[ "Pageviews" ]`' line-color="#2847b7" fill-opacity="0.16"
-        line-width="4" :xLabelFormat="labelFormat" :dateFormat="dateFormat" :smooth="false" :xLabelAngle="45"
+        line-width="4" :dateFormat="dateFormat" :smooth="false" xLabelAngle="45"
+        removed data-xLabelFormat="labelFormat" data-xLabels="xLabel"
         :hoverCallback="hoverCallback" @click="chartClick"
         grid="true" grid-text-weight="bold">
     </area-chart>

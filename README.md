@@ -40,5 +40,7 @@ These may not be as useful to other people as the original author.
 - [x] Clean data in visits table older than ~32 days
 - [x] Summarize data monthly to save space
 - [x] Previous month (summary) view
-- [ ] 12-month view
+- [x] Custom date ranges
+- [x] Clickable charts
+- [x] 12-month view
 - [ ] Composite indexes
