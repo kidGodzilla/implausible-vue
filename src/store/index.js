@@ -66,6 +66,7 @@ export default createStore({
             state.rangeString = rangeString;
         },
         setRange (state, range) {
+            if (!range) range = '1';
             const ranges = {
                 '-1': ['Yesterday', 1, 1],
                 '1': ['Latest', 0, 0],
@@ -76,7 +77,7 @@ export default createStore({
                 '30': ['Last 30 Days', 30, 0]
             };
 
-            let values = ranges[range || '1'];
+            let values = ranges[range];
 
             // SQL-based ranges
             // Daily: -2,-3,-4,-5,-6,-7..-31
@@ -86,23 +87,19 @@ export default createStore({
             // Monthly: 2022-05
             // Annual: 2022
 
-            if (parseInt(range) == range) range = parseInt(range);
-
-            console.log('range', range);
+            // Daily: -2,-3,-4,-5,-6,-7..-31
+            if (range < -1 && range > -32) {
+                let val = range * -1;
+                values = [`${ new Date(daysAgo(val)).toDateString() }`, val, val];
+            }
 
             // Monthly: 2022-05
             if (range.length === 7) {
                 values = [`${ range }`, range, range];
             }
 
-            // Daily: -2,-3,-4,-5,-6,-7..-31
-            else if (range < -1 && range > -32) {
-                let val = range * -1;
-                values = [`${ new Date(daysAgo(val)).toDateString() }`, val, val];
-            }
-
             // Annual: 2022
-            else if (range > 1000 && range < 3000) {
+            if (range > 1000 && range < 3000) {
                 values = [`${ range }`, range, range];
             }
 
@@ -110,9 +107,10 @@ export default createStore({
             state.start = daysAgo(values[1]);
             state.end = daysAgo(values[2]);
 
-            state.range = range || 1;
+            if (parseInt(range) == range) range = parseInt(range);
+            state.range = range;
 
-            let targetSearch = `?host=${ state.host }&range=${ range || '1' }`;
+            let targetSearch = `?host=${ state.host }&range=${ range }`;
             if (location.search !== targetSearch) window.history.pushState('', '', targetSearch);
         },
     },
