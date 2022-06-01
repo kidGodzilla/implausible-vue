@@ -86,19 +86,23 @@ export default createStore({
             // Monthly: 2022-05
             // Annual: 2022
 
-            // Daily: -2,-3,-4,-5,-6,-7..-31
-            if (range < -1 && range > -32) {
-                let val = range * -1;
-                values = [`${ new Date(daysAgo(val)).toDateString() }`, val, val];
-            }
+            if (parseInt(range) == range) range = parseInt(range);
+
+            console.log('range', range);
 
             // Monthly: 2022-05
             if (range.length === 7) {
                 values = [`${ range }`, range, range];
             }
 
+            // Daily: -2,-3,-4,-5,-6,-7..-31
+            else if (range < -1 && range > -32) {
+                let val = range * -1;
+                values = [`${ new Date(daysAgo(val)).toDateString() }`, val, val];
+            }
+
             // Annual: 2022
-            if (range > 1000 && range < 3000) {
+            else if (range > 1000 && range < 3000) {
                 values = [`${ range }`, range, range];
             }
 
@@ -106,7 +110,6 @@ export default createStore({
             state.start = daysAgo(values[1]);
             state.end = daysAgo(values[2]);
 
-            if (parseInt(range) == range) range = parseInt(range);
             state.range = range || 1;
 
             let targetSearch = `?host=${ state.host }&range=${ range || '1' }`;
