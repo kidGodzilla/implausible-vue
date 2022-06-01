@@ -122,12 +122,15 @@ export async function queryCounts(store, column = 'hour', max = 10) {
 
     const SIV = store.state.key ? CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key)) : null;
 
+    const columnValue = (store.state.showVisitors ? 'count(DISTINCT ip)' : 'count(*)');
+    console.log('columnValue', columnValue, store.state.showVisitors);
+
     let isTimeseries = column === 'hour' || column === 'date';
-    let orderByValue = isTimeseries ? column : `count(*)`;
+    let orderByValue = isTimeseries ? column : columnValue;
     let direction = isTimeseries ? 'ASC' : 'DESC';
     let limit = isTimeseries ? '' : ` LIMIT ${ max }`;
 
-    let sql = `SELECT ${ column }, count(*) FROM visits${ whereClauseComponents(store) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
+    let sql = `SELECT ${ column }, ${ columnValue } FROM visits${ whereClauseComponents(store) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
     let res = await query(sql);
 
     // console.log('queryCounts:', sql, res);

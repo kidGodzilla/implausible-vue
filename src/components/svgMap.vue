@@ -18,25 +18,38 @@ export default {
     },
     dark: {
       type: Boolean
-    }
+    },
+    showVisitors: {
+      type: Boolean
+    },
   },
 
   methods: {
     createMap() {
+      let data = {};
+
+      if (this.showVisitors) {
+        data.visitors = {
+          name: 'visitors',
+          format: '{0}',
+          thousandSeparator: ','
+        }
+      } else {
+        data.pageviews = {
+          name: 'pageviews',
+          format: '{0}',
+          thousandSeparator: ','
+        }
+      }
+
       new svgMap({
         targetElementID: this.id,
         colorMax: this.dark ? '#4c9be8' : '#3459E6',
         colorMin: '#c7d2fc',
         colorNoData: this.dark ? 'rgb(78, 93, 108)' : '#E2E2E2',
         data: {
-          data: {
-            visitors: {
-              name: 'visitors',
-              format: '{0}',
-              thousandSeparator: ','
-            }
-          },
-          applyData: 'visitors',
+          data,
+          applyData: this.showVisitors ? 'visitors' : 'pageviews',
           values: this.countries || {}
         }
       });

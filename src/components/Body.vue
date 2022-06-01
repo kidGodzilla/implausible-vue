@@ -25,12 +25,16 @@ const languageLookup = str => {
 import { queryCounts, querySummary } from '../store/query-utils';
 import { mapGetters } from '../store/map-state';
 import { useStore } from 'vuex';
-import {onMounted, ref, watch} from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 const store = useStore();
 
 const countries = ref({});
 
 const { range, host, dark, summary, showVisitors } = mapGetters();
+
+const visitorsString = computed(() => {
+  return showVisitors.value ? 'Visitors' : 'Pageviews';
+});
 
 async function getCountryData() {
   if (range.value.length === 7 || range.value > 1000) {
@@ -41,7 +45,8 @@ async function getCountryData() {
       let newCountries = {};
 
       Object.keys(countries_value).forEach(key => {
-        newCountries[key] = { visitors: countries_value[key] }
+        if (showVisitors.value) newCountries[key] = { visitors: countries_value[key] }
+        else newCountries[key] = { pageviews: countries_value[key] }
       });
 
       countries.value = newCountries;
@@ -55,9 +60,8 @@ async function getCountryData() {
   let newCountries = {};
 
   result.forEach(row => {
-    newCountries[row.country_code] = {
-      visitors: row['count(*)']
-    };
+    if (showVisitors.value) newCountries[row.country_code] = { visitors: row['count(DISTINCT ip)'] };
+    else newCountries[row.country_code] = { pageviews: row['count(*)'] };
   });
 
   countries.value = newCountries;
@@ -75,6 +79,7 @@ watch(host, getSummaryData);
 watch(range, getCountryData);
 watch(range, getSummaryData);
 watch(summary, getCountryData);
+watch(showVisitors, getCountryData);
 </script>
 
 <template>
@@ -124,28 +129,28 @@ watch(summary, getCountryData);
             <div class="tab-content mt-5">
               <div class="tab-pane fade active show" id="referrers">
                 <small class="text-muted w-495 d-inline-block">Source</small>
-                <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="referer_host" :favicons="true" :links="true" defaultText="Direct / None" />
               </div>
 
               <div class="tab-pane fade show" id="medium">
                 <small class="text-muted w-495 d-inline-block">Source</small>
-                <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="utm_medium" />
               </div>
 
               <div class="tab-pane fade show" id="source">
                 <small class="text-muted w-495 d-inline-block">Source</small>
-                <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="utm_source" />
               </div>
 
               <div class="tab-pane fade show" id="campaign">
                 <small class="text-muted w-495 d-inline-block">Source</small>
-                <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="utm_campaign" />
               </div>
@@ -172,7 +177,7 @@ watch(summary, getCountryData);
             <div class="tab-content mt-5">
               <div class="tab-pane fade show active" id="pages">
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
-                <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="pathname" :linkPrefix="host" :links="true" defaultText="None" />
               </div>
@@ -192,7 +197,7 @@ watch(summary, getCountryData);
     <div class="row mt-3">
       <div class="col-md-6">
         <Card title="Countries">
-          <SvgMap :countries="countries" :dark="dark" />
+          <SvgMap :countries="countries" :dark="dark" :showVisitors="showVisitors" />
         </Card>
       </div>
 
@@ -221,7 +226,7 @@ watch(summary, getCountryData);
           <div class="tab-content mt-5">
             <div class="tab-pane fade show active" id="size">
               <small class="text-muted w-495 d-inline-block">Device Type</small>
-              <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+              <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
               <PseudoTable column="device_type" :iconify="true" :keyFormatter="capitalizeFirstLetter" />
 
@@ -232,28 +237,28 @@ watch(summary, getCountryData);
 
             <div class="tab-pane fade" id="new">
               <small class="text-muted w-495 d-inline-block">New vs. Returning</small>
-              <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+              <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
               <PseudoTable column="is_new" :iconify="true" defaultText="Returning" :keyFormatter="isNewFormatter" />
             </div>
 
             <div class="tab-pane fade" id="browser">
               <small class="text-muted w-495 d-inline-block">Browser</small>
-              <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+              <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
               <PseudoTable column="browser" :browserIcons="true" />
             </div>
 
             <div class="tab-pane fade" id="language">
               <small class="text-muted w-495 d-inline-block">Language</small>
-              <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+              <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
               <PseudoTable column="lang" :keyFormatter="languageLookup" />
             </div>
 
             <div class="tab-pane fade" id="os">
               <small class="text-muted w-495 d-inline-block">OS</small>
-              <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+              <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
               <PseudoTable column="os" :osIcons="true" />
             </div>

@@ -1,7 +1,7 @@
 <script setup>
 import {queryCounts, queryLoadTimes} from '../store/query-utils';
 import { mapGetters } from '../store/map-state';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore();
 
@@ -21,16 +21,22 @@ const { column, iconify, favicons, browserIcons, osIcons, links, linkPrefix, lim
   keyFormatter: Function,
 });
 
-const { host, range, summary } = mapGetters();
+
+const { host, range, summary, showVisitors } = mapGetters();
+
+const valueColumnActual = computed(() => {
+  return valueColumn || (showVisitors.value ? 'count(DISTINCT ip)' : 'count(*)');
+});
 
 const rows = ref([]);
 const maxValue = ref(0);
 const loading = ref(true);
 
 async function getData() {
+  console.log('valueColumnActual', valueColumnActual.value)
   if (range.value.length === 7 || range.value > 1000) {
     let summary_value = JSON.parse(JSON.stringify(summary.value));
-    let value_name = valueColumn || 'count(*)';
+    let value_name = valueColumnActual.value;
     let column_name = column;
 
     if (loadTimes) column_name = 'loadTimes';
@@ -69,7 +75,7 @@ async function getData() {
 
   rows.value = result;
   // console.log(result);
-  try{ maxValue.value = result[0][valueColumn || 'count(*)']; } catch(e) { maxValue.value = 0 }
+  try{ maxValue.value = result[0][valueColumnActual.value]; } catch(e) { maxValue.value = 0 }
   loading.value = false;
 }
 
@@ -118,6 +124,7 @@ onMounted(getData);
 watch(host, getData);
 watch(range, getData);
 watch(summary, getData);
+watch(showVisitors, getData);
 </script>
 
 <template>
@@ -130,7 +137,7 @@ watch(summary, getData);
     </div>
 
     <div class="mb-1" v-for="row in rows" v-else>
-      <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" :style="`width: ${ (row[valueColumn || 'count(*)'] / maxValue ) * 85 }%`">&nbsp;
+      <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" :style="`width: ${ (row[valueColumnActual] / maxValue ) * 85 }%`">&nbsp;
 
         <div v-if="iconify && addIcon(keyFormatter ? keyFormatter(row[column]) : row[column])" style="display:inline-block; margin-left: -3px">
           <i :class="addIcon(keyFormatter ? keyFormatter(row[column]) : row[column])"></i>&nbsp;&thinsp;
@@ -163,7 +170,7 @@ watch(summary, getData);
         <span v-if="row[column] && !links">{{ keyFormatter ? keyFormatter(row[column]) : row[column] }}</span>
 
       </div>
-      <span class="float-right text-right pt-1">{{ valueFormatter ? valueFormatter(row[valueColumn || "count(*)"]) : row[valueColumn || "count(*)"] }}</span>
+      <span class="float-right text-right pt-1">{{ valueFormatter ? valueFormatter(row[valueColumnActual]) : row[valueColumnActual] }}</span>
     </div>
 
   </div>
