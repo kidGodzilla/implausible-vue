@@ -120,7 +120,7 @@ body.dark .shaded a { color: #ebebeb; }
   position: relative;
   top: 1px;
 }
-body.dark .nav-link.dropdown-toggle {
+.nav-link.dropdown-toggle {
   padding-right: 0;
   padding-left: 0;
 }

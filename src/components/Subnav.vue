@@ -110,6 +110,7 @@ function handleChangedDay(payload) {
       <ul class="nav nav-pills mb-1 d-inline-block">
         <li class="nav-item dropdown ms-auto">
           <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
+            <img class="favicon" v-if="host" :src="`https://logo.clearbit.com/${ host }`" onerror="this.src='default.png';">
             <h5 class="d-inline pt-2 mb-0 name">{{ capitalizeFirstLetter(host) || 'Select a Domain' }}</h5>
           </a>
 
@@ -160,4 +161,6 @@ function handleChangedDay(payload) {
 .vuejs3-datepicker__value { padding: 8px 10px !important; }
 body.dark .vuejs3-datepicker__value { background: rgb(32,55,76); }
 body.dark .vuejs3-datepicker__calendar-actionarea { background: rgb(32,55,76) }
+
+.favicon { height: 32px; margin-top: -7px; margin-right: 10px; border-radius: 2px; }
 </style>
