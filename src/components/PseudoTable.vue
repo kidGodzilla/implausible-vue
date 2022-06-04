@@ -124,6 +124,21 @@ function addIcon(s) {
   return lookup[s];
 }
 
+function columnToHost(s) {
+  s = (s+'').toLowerCase().trim();
+
+  if (s.indexOf('http') === 0) {
+    const url = new URL(s);
+    s = url.hostname;
+  }
+
+  return s;
+}
+
+function maxLength(s, n = 40) {
+  if (s && s.length > n) s = s.substring(0, n) + '...';
+  return s;
+}
 
 onMounted(getData);
 watch(host, getData);
@@ -151,7 +166,7 @@ watch(showVisitors, getData);
         <span v-if="!row[column]">{{ defaultText || 'None' }}</span>
 
         <div v-if="favicons" style="display:inline-block">
-          <img v-if="row[column] && favicons" :src="`https://logo.clearbit.com/${ row[column] }`" onerror="this.onerror=null; this.src='default.png';">&nbsp;&thinsp;
+          <img v-if="row[column] && favicons" :src="`https://logo.clearbit.com/${ columnToHost(row[column]) }`" onerror="this.onerror=null; this.src='default.png';">&nbsp;&thinsp;
         </div>
 
         <div v-if="browserIcons" style="display:inline-block">
@@ -165,10 +180,10 @@ watch(showVisitors, getData);
         <div v-if="links" style="display:inline-block">
           <a
               v-if="row[column] && links" class="d-inline-block text-truncate"
-              :href="`http://${ linkPrefix || '' }${ row[column] }`"
+              :href="`${ row[column].indexOf('http') ? 'http://':'' }${ linkPrefix || '' }${ row[column] }`"
               target="_blank"
           >
-            {{ row[column] }}
+            {{ maxLength(row[column]) }}
           </a>
         </div>
 

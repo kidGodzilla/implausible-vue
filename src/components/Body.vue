@@ -114,6 +114,9 @@ watch(showVisitors, getCountryData);
               <li class="nav-item ms-auto">
                 <a class="nav-link active" data-bs-toggle="tab" href="#referrers"><span class="d-none d-sm-inline">Referrers</span><span class="d-inline d-sm-none">All</span></a>
               </li>
+              <li class="nav-item ms-auto">
+                <a class="nav-link" data-bs-toggle="tab" href="#referrer_urls">URLs</a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#medium">Medium</a>
               </li>
@@ -132,6 +135,13 @@ watch(showVisitors, getCountryData);
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="referer_host" :favicons="true" :links="true" defaultText="Direct / None" />
+              </div>
+
+              <div class="tab-pane fade show" id="referrer_urls">
+                <small class="text-muted w-495 d-inline-block">Source</small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
+
+                <PseudoTable column="referer_url" :favicons="true" :links="true" defaultText="Direct / None" />
               </div>
 
               <div class="tab-pane fade show" id="medium">
