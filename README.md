@@ -20,7 +20,13 @@ A compact "seed" is used to generate the encryption and decryption key on the co
 
 https://analytics.servers.do/?host=analytics.servers.do&range=30
 
-## Previous Frontend & Backend
+## Ready-to-use Distributable
+
+The following repo contains a bundled version of the frontend and backend that is the simplest to set up and self-host:
+
+https://github.com/kidGodzilla/sqlite-analytics
+
+### Previous Frontend & Backend
 
 _This backend is not up-to-date and contains a couple of minor bugs. This version predates encryption._
 
