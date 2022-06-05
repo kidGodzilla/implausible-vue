@@ -26,11 +26,6 @@ The following repo contains a bundled version of the frontend and backend that i
 
 https://github.com/kidGodzilla/sqlite-analytics
 
-### Previous Frontend & Backend
-
-_This backend is not up-to-date and contains a couple of minor bugs. This version predates encryption._
-
-https://github.com/kidGodzilla/unsimple-analytics
 
 ---
 
