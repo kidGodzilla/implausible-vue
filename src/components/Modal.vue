@@ -4,10 +4,13 @@ import { mapGetters } from '../store/map-state';
 
 const { key, publicKey, dark } = mapGetters();
 
+let queryParams = {};
+location.search.slice(1).split('&').map(s => s.split('=')).forEach(a => queryParams[a[0]] = a[1]);
+
 let server = 'https://analytics.servers.do' || `${ location.protocol }//${ location.host }`;
 let encryption_string = computed(() => publicKey.value ? `&lt;script>window.__analytics_encryption_key = '${ publicKey.value }';&lt;/script>\n` : '');
 const script_text = computed(() => formatString(`&lt;!-- Servers.do Analytics -->\n${ encryption_string.value }&lt;script src='${ server }/a.js'>&lt;/script>`));
-const url_text = computed(() => `${ server }?key=${ encodeURIComponent(key.value) }&pkey=${ publicKey.value }`);
+const url_text = computed(() => `${ server }?host=${ queryParams.host }&range=${ queryParams.range }&key=${ encodeURIComponent(key.value) }&pkey=${ publicKey.value }`);
 
 function formatString(text) {
   return window.$('<textarea />').html(text).text()
