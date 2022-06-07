@@ -59,6 +59,20 @@ async function getData() {
         });
       }
 
+      // Combine all null / falsey rows
+      let filtered = result.filter(x => !x[column_name]);
+
+      // Combine all null / falsey rows
+      if (filtered.length > 1) {
+        let total = filtered.map(x => x[value_name]).reduce((p, c) => p += c);
+        let new_result = result.filter(x => x[column]);
+        let newObj = {};
+        newObj[column] = null;
+        newObj[value_name] = total;
+        new_result.unshift(newObj);
+        result = new_result;
+      }
+
       result.sort((b, a) => a[value_name] - b[value_name]);
 
       // Attempt to decrypt
@@ -78,8 +92,22 @@ async function getData() {
 
   // console.log('result', column, result);
 
+  let filtered = result.filter(x => !x[column]);
+
+  // Combine all null / falsey rows
+  if (filtered.length > 1) {
+    let total = filtered.map(x => x[valueColumnActual.value]).reduce((p, c) => p += c);
+    let new_result = result.filter(x => x[column]);
+    let newObj = {};
+    newObj[column] = null;
+    newObj[valueColumnActual.value] = total;
+    new_result.unshift(newObj);
+    result = new_result;
+  }
+
+  result.sort((b, a) => a[valueColumnActual.value] - b[valueColumnActual.value]);
+
   rows.value = result;
-  // console.log(result);
   try{ maxValue.value = result[0][valueColumnActual.value]; } catch(e) { maxValue.value = 0 }
   loading.value = false;
 }
