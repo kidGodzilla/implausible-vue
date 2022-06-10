@@ -1,5 +1,5 @@
 <script setup>
-import { queryCounts, queryLoadTimes, returnDecryptor } from '../store/query-utils';
+import { queryCounts, queryEntryExitPages, queryLoadTimes, returnDecryptor } from '../store/query-utils';
 import { ref, onMounted, watch, computed } from 'vue';
 import { mapGetters } from '../store/map-state';
 import { useStore } from 'vuex';
@@ -90,9 +90,14 @@ async function getData() {
   //   return;
   // }
 
-  let result = loadTimes ? await queryLoadTimes(store) : await queryCounts(store, column, limit || 10);
+  // if column is entrypages or ExitPagecount
+  let result = [];
+  if (valueColumn === 'AvgLoadTime') result = await queryLoadTimes(store);
+  else if (valueColumn === 'EntrypageCount') result = await queryEntryExitPages(store, column, valueColumn, limit || 10);
+  else if (valueColumn === 'ExitPagecount') result = await queryEntryExitPages(store, column, valueColumn, limit || 10);
+  else result = await queryCounts(store, column, limit || 10);
 
-  // console.log('result', column, result);
+  // console.log('result', column, valueColumnActual.value, result);
 
   let filtered = result.filter(x => !x[column]);
 

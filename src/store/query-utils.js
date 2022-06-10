@@ -229,6 +229,40 @@ export async function queryCounts(store, column = 'hour', max = 10) {
     return res;
 }
 
+export async function queryEntryExitPages(store, column = 'pathname', valueColumn = 'EntrypageCount', max = 10) {
+    if (!store.state.host) return [];
+
+    const SIV = store.state.key ? CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key)) : null;
+    // let sql = `SELECT ${ column }, ${ columnValue } FROM visits${ whereClauseComponents(store) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
+
+    let sql = `SELECT ${ column },
+    COUNT(CASE WHEN ts = First THEN 1 END) AS EntrypageCount,
+    COUNT(CASE WHEN ts = Last THEN 1 END) AS ExitPagecount
+FROM (SELECT *,
+    MIN(ts) OVER (PARTITION BY ip, 'date') AS First,
+    MAX(ts) OVER (PARTITION BY ip, 'date') AS Last
+    FROM visits) T
+${ whereClauseComponents(store) }
+GROUP BY ${ column }
+ORDER BY ${ valueColumn } DESC LIMIT ${ max }`
+
+    let res = await query(sql);
+    // console.log('queryCounts:', sql, res, column);
+
+    res = res.filter(x => x[valueColumn] > 0);
+
+    if (SIV) {
+        res.forEach(row => {
+            try {
+                let decrypted = SIV.decrypt(CryptoJS.enc.Hex.parse(row[column])).toString(CryptoJS.enc.Utf8);
+                if (decrypted && decrypted != 'false') row[column] = decrypted;
+            } catch(e){}
+        });
+    }
+
+    return res;
+}
+
 export async function querySummary(store, date) {
     let sql = `SELECT * FROM summaries${ whereClauseComponents(store, 1) } AND date ${ (date > 1000 && date < 3000) ? 'LIKE' : '=' } '${ date }${ (date > 1000 && date < 3000) ? '-%' : '' }';`;
     let result = {}, loadTimes = [], res = await query(sql);
