@@ -216,7 +216,7 @@ watch(country, getData);
         <span v-else-if="!row[column]">{{ defaultText || 'None' }}</span>
 
         <div v-if="favicons" style="display: inline-block">
-          <img v-if="row[column] && favicons" :src="`https://logo.clearbit.com/${ columnToHost(row[column]) }`" onerror="this.onerror=null; this.src='default.png';">&nbsp;&thinsp;
+          <img v-if="row[column] && favicons" :src="`https://logo.clearbit.com/${ columnToHost(row[column]) }`" onerror="this.src='default.png';">&nbsp;&thinsp;
         </div>
 
         <div v-if="browserIcons" style="display: inline-block">
