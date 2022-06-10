@@ -28,6 +28,8 @@ export default {
     createMap() {
       let data = {};
 
+      document.querySelectorAll('.svgMap-tooltip').forEach(el => el.remove());
+
       if (this.showVisitors) {
         data.visitors = {
           name: 'visitors',
@@ -52,6 +54,16 @@ export default {
           applyData: this.showVisitors ? 'visitors' : 'pageviews',
           values: this.countries || {}
         }
+      });
+
+      this.$nextTick(() => {
+        document.querySelectorAll('.svgMap-map-image path[data-id]').forEach(el => {
+          el.onclick = e => {
+            const country = el.getAttribute('data-id');
+            // console.log('clicked', country);
+            this.$emit('clicked', country);
+          }
+        });
       });
     }
   },
