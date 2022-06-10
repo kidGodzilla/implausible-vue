@@ -65,7 +65,10 @@ function handleQueryParams() {
   if (_hosts) {
     _hosts.sort((a, b) => a.localeCompare(b));
     store.commit('setDomains', _hosts);
+    if (!queryParams.host) queryParams.host = _hosts[0];
   }
+
+  if (!queryParams.range) queryParams.range = 7;
 
   store.commit('setPath', queryParams.path || '');
   store.commit('setHost', queryParams.host || '');
