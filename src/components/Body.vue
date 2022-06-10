@@ -30,30 +30,30 @@ const store = useStore();
 
 const countries = ref({});
 
-const { range, host, dark, summary, showVisitors } = mapGetters();
+const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, dark, summary, showVisitors } = mapGetters();
 
 const visitorsString = computed(() => {
   return showVisitors.value ? 'Visitors' : 'Pageviews';
 });
 
 async function getCountryData() {
-  if (range.value.length === 7 || range.value > 1000) {
-    let summary_value = JSON.parse(JSON.stringify(summary.value));
-    let countries_value = showVisitors.value ? summary_value.country_code__visitors : summary_value.country_code;
-
-    if (countries_value) {
-      let newCountries = {};
-
-      Object.keys(countries_value).forEach(key => {
-        if (showVisitors.value) newCountries[key] = { visitors: countries_value[key] }
-        else newCountries[key] = { pageviews: countries_value[key] }
-      });
-
-      countries.value = newCountries;
-    }
-
-    return;
-  }
+  // if (range.value.length === 7 || range.value > 1000) {
+  //   let summary_value = JSON.parse(JSON.stringify(summary.value));
+  //   let countries_value = showVisitors.value ? summary_value.country_code__visitors : summary_value.country_code;
+  //
+  //   if (countries_value) {
+  //     let newCountries = {};
+  //
+  //     Object.keys(countries_value).forEach(key => {
+  //       if (showVisitors.value) newCountries[key] = { visitors: countries_value[key] }
+  //       else newCountries[key] = { pageviews: countries_value[key] }
+  //     });
+  //
+  //     countries.value = newCountries;
+  //   }
+  //
+  //   return;
+  // }
 
   let result = await queryCounts(store, 'country_code', 999);
 
@@ -72,14 +72,44 @@ function getSummaryData() {
   else if (range.value > 1000 && range.value < 3000) querySummary(store, range.value);
 }
 
+function countryClicked(country) {
+  console.log('clicked on', country);
+  store.commit('setCountry', country);
+}
+
 onMounted(getCountryData);
-onMounted(getSummaryData);
+// onMounted(getSummaryData);
 watch(host, getCountryData);
-watch(host, getSummaryData);
+// watch(host, getSummaryData);
+watch(path, getCountryData);
+// watch(path, getSummaryData);
 watch(range, getCountryData);
-watch(range, getSummaryData);
-watch(summary, getCountryData);
+// watch(range, getSummaryData);
+// watch(summary, getCountryData);
 watch(showVisitors, getCountryData);
+watch(os, getCountryData);
+watch(device, getCountryData);
+watch(is_bot, getCountryData);
+watch(is_new, getCountryData);
+watch(browser, getCountryData);
+watch(language, getCountryData);
+watch(referrer, getCountryData);
+watch(utm_source, getCountryData);
+watch(utm_medium, getCountryData);
+watch(utm_campaign, getCountryData);
+watch(country, getCountryData);
+// rm later
+// watch(os, getSummaryData);
+// watch(device, getSummaryData);
+// watch(is_bot, getSummaryData);
+// watch(is_new, getSummaryData);
+// watch(browser, getSummaryData);
+// watch(language, getSummaryData);
+// watch(referrer, getSummaryData);
+// watch(utm_source, getSummaryData);
+// watch(utm_medium, getSummaryData);
+// watch(utm_campaign, getSummaryData);
+// watch(country, getSummaryData);
 </script>
 
 <template>
@@ -91,7 +121,7 @@ watch(showVisitors, getCountryData);
       <div class="col-md-12">
         <Card>
 
-          <div class="row">
+          <div class="row p-1 pt-2">
             <Stat title="Visitors" :muted="false" :underline="!showVisitors" @click="store.commit('setShowVisitors', true)" />
             <Stat title="Total Pageviews" :muted="false" :underline="showVisitors" @click="store.commit('setShowVisitors', false)" />
             <Stat title="Bounce Rate" />
@@ -108,7 +138,7 @@ watch(showVisitors, getCountryData);
       <div class="col-md-6">
         <div class="card min-357" :class="{ 'bg-dark': dark }">
           <div class="card-body">
-            <h5 class="card-title float-left" style="margin-bottom: -37px;">Sources</h5>
+            <h5 class="card-title float-left tweaked">Sources</h5>
 
             <ul class="nav nav-tabs float-right">
               <li class="nav-item ms-auto">
@@ -134,7 +164,7 @@ watch(showVisitors, getCountryData);
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="referer_host" :favicons="true" :links="true" defaultText="Direct / None" />
+                <PseudoTable column="referer_host" setter="setReferrer" :favicons="true" :links="true" defaultText="Direct / None" />
               </div>
 
               <div class="tab-pane fade show" id="referrer_urls">
@@ -148,21 +178,21 @@ watch(showVisitors, getCountryData);
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="utm_medium" />
+                <PseudoTable column="utm_medium"  setter="setUtm_medium" />
               </div>
 
               <div class="tab-pane fade show" id="source">
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="utm_source" />
+                <PseudoTable column="utm_source" setter="setUtm_source" />
               </div>
 
               <div class="tab-pane fade show" id="campaign">
                 <small class="text-muted w-495 d-inline-block">Source</small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="utm_campaign" />
+                <PseudoTable column="utm_campaign" setter="setUtm_campaign" />
               </div>
             </div>
 
@@ -173,7 +203,7 @@ watch(showVisitors, getCountryData);
       <div class="col-md-6 mt-3 mt-sm-0">
         <div class="card min-357" :class="{ 'bg-dark': dark }">
           <div class="card-body">
-            <h5 class="card-title float-left" style="margin-bottom: -37px;">Pages</h5>
+            <h5 class="card-title float-left tweaked">Pages</h5>
 
             <ul class="nav nav-tabs float-right">
               <li class="nav-item ms-auto">
@@ -189,14 +219,14 @@ watch(showVisitors, getCountryData);
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="pathname" :linkPrefix="host" :links="true" defaultText="None" />
+                <PseudoTable column="pathname" setter="setPath" defaultText="None" />
               </div>
 
               <div class="tab-pane fade show" id="loadtimes">
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">Avg. Load Time</small>
 
-                <PseudoTable column="pathname" valueColumn="AvgLoadTime" :linkPrefix="host" :links="true" :loadTimes="true" :valueFormatter="twoPlacesMinZero" />
+                <PseudoTable column="pathname" valueColumn="AvgLoadTime" setter="setPath" :loadTimes="true" :valueFormatter="twoPlacesMinZero" />
               </div>
             </div>
           </div>
@@ -207,14 +237,14 @@ watch(showVisitors, getCountryData);
     <div class="row mt-3">
       <div class="col-md-6">
         <Card title="Countries">
-          <SvgMap :countries="countries" :dark="dark" :showVisitors="showVisitors" />
+          <SvgMap :countries="countries" :dark="dark" :showVisitors="showVisitors" @clicked="countryClicked" />
         </Card>
       </div>
 
       <div class="col-md-6 mt-3 mt-sm-0">
 
         <Card>
-          <h5 class="card-title float-left" style="margin-bottom: -37px;">Users</h5>
+          <h5 class="card-title float-left tweaked">Users</h5>
           <ul class="nav nav-tabs float-right">
             <li class="nav-item ms-auto">
               <a class="nav-link active" data-bs-toggle="tab" href="#size"><span class="d-none d-sm-inline">Device </span>Type</a>
@@ -238,39 +268,39 @@ watch(showVisitors, getCountryData);
               <small class="text-muted w-495 d-inline-block">Device Type</small>
               <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-              <PseudoTable column="device_type" :iconify="true" :keyFormatter="capitalizeFirstLetter" />
+              <PseudoTable column="device_type" setter="setDevice" :iconify="true" :keyFormatter="capitalizeFirstLetter" />
 
               <hr>
 
-              <PseudoTable column="bot" :iconify="true" defaultText="Normal Users" :keyFormatter="botFormatter" />
+              <PseudoTable column="bot" setter="setIs_bot" :iconify="true" defaultText="Normal Users" :keyFormatter="botFormatter" />
             </div>
 
             <div class="tab-pane fade" id="new">
               <small class="text-muted w-495 d-inline-block">New vs. Returning</small>
               <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-              <PseudoTable column="is_new" :iconify="true" defaultText="Returning" :keyFormatter="isNewFormatter" />
+              <PseudoTable column="is_new" setter="setIs_new"  :iconify="true" defaultText="Returning" :keyFormatter="isNewFormatter" />
             </div>
 
             <div class="tab-pane fade" id="browser">
               <small class="text-muted w-495 d-inline-block">Browser</small>
               <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-              <PseudoTable column="browser" :browserIcons="true" />
+              <PseudoTable column="browser" setter="setBrowser" :browserIcons="true" />
             </div>
 
             <div class="tab-pane fade" id="language">
               <small class="text-muted w-495 d-inline-block">Language</small>
               <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-              <PseudoTable column="lang" :keyFormatter="languageLookup" />
+              <PseudoTable column="lang"  setter="setLanguage" :keyFormatter="languageLookup" />
             </div>
 
             <div class="tab-pane fade" id="os">
               <small class="text-muted w-495 d-inline-block">OS</small>
               <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-              <PseudoTable column="os" :osIcons="true" />
+              <PseudoTable column="os"  setter="setOs" :osIcons="true" />
             </div>
           </div>
 
@@ -281,3 +311,14 @@ watch(showVisitors, getCountryData);
 
   </div>
 </template>
+
+<style scoped>
+.card-title.float-left.tweaked {
+  margin-bottom: -35px;
+  position: relative;
+  top: -6px;
+}
+.nav.nav-tabs.float-right {
+  position: relative;
+}
+</style>

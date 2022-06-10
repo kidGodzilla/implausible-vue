@@ -83,14 +83,82 @@ export function isoDate(d) {
 }
 
 export function whereClauseComponents(store, skipDates) {
-    let components = [];
+    let components = [], SIV;
 
-    if (store.state.host) components.push(`host = '${ store.state.host }'`);
-    if (store.state.host && store.state.key) {
-        const SIV = CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key));
-        const encrypted_host = SIV.encrypt(store.state.host).toString();
-        components[0] = `(${ components[0] } OR host = '${ encrypted_host }')`;
+    if (store.state.key) {
+        SIV = CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key));
     }
+
+    // Hostname
+    if (store.state.host) {
+        let ps = `host = '${ store.state.host }'`;
+        if (SIV) {
+            let ps2 = SIV.encrypt(store.state.host).toString();
+            ps = `(${ ps } OR host = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
+    // Pathname
+    if (store.state.path) {
+        let ps = `pathname = '${ store.state.path }'`;
+        if (SIV) {
+            let ps2 = SIV.encrypt(store.state.path).toString();
+            ps = `(${ ps } OR pathname = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
+
+    // referrer
+    if (store.state.referrer !== '') {
+        let val = store.state.referrer || '';
+        let ps = `referer_host = '${ val }'`;
+        if (SIV && val) {
+            let ps2 = SIV.encrypt(val).toString();
+            ps = `(${ ps } OR referer_host = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
+    // utm_source
+    if (store.state.utm_source !== '') {
+        let val = store.state.utm_source || null;
+        let ps = val ? `utm_source = '${ val }'` : `utm_source is null`;
+        if (SIV && val) {
+            let ps2 = SIV.encrypt(val).toString();
+            ps = `(${ ps } OR utm_source = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
+    // utm_medium
+    if (store.state.utm_medium !== '') {
+        let val = store.state.utm_medium || null;
+        let ps = val ? `utm_medium = '${ val }'` : `utm_medium is null`;
+        if (SIV && val) {
+            let ps2 = SIV.encrypt(val).toString();
+            ps = `(${ ps } OR utm_medium = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
+    // utm_campaign
+    if (store.state.utm_campaign !== '') {
+        let val = store.state.utm_campaign || null;
+        let ps = val ? `utm_campaign = '${ val }'` : `utm_campaign is null`;
+        if (SIV && val) {
+            let ps2 = SIV.encrypt(val).toString();
+            ps = `(${ ps } OR utm_campaign = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
+
+    // Unencrypted filters
+    if (store.state.os) components.push(`os = '${ store.state.os }'`);
+    if (store.state.device) components.push(`device_type = '${ store.state.device }'`);
+    if (store.state.is_bot !== '') components.push(`bot = '${ store.state.is_bot }'`);
+    if (store.state.is_new !== '') components.push(`is_new = '${ store.state.is_new }'`);
+    if (store.state.browser) components.push(`browser = '${ store.state.browser }'`);
+    if (store.state.language) components.push(`lang = '${ store.state.language }'`);
+    if (store.state.country) components.push(`country_code = '${ store.state.country }'`);
+
+    // Start / End Range
     if (store.state.start && store.state.end && !skipDates) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
 
     return (components.length ? ` WHERE ` : '') + (components.join(' AND ') || '');

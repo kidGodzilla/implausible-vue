@@ -2,7 +2,7 @@
 import { mapGetters } from '../store/map-state'
 import Datepicker from 'vuejs3-datepicker';
 import { useStore } from 'vuex'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const picked = ref(new Date());
 const showPicker = ref(false);
@@ -17,8 +17,37 @@ const disabledDates = {
   preventDisableDateSelection: true,
 }
 
-const { host, domains, range, rangeString, liveVisitors } = mapGetters();
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, domains, range, rangeString, liveVisitors } = mapGetters();
 const store = useStore();
+
+const filterable = ref({ path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country });
+const filterKeys = 'path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country'.split(', ')
+const filters = ref([]);
+
+const search = computed(() => location.search);
+
+function computeActiveFilters() {
+  filters.value = [];
+  filterKeys.forEach(key => {
+    if (filterable.value[key] !== '') {
+      if (!filters.value.includes(key)) filters.value.push(key);
+    }
+  });
+}
+watch(os, computeActiveFilters);
+watch(path, computeActiveFilters);
+watch(device, computeActiveFilters);
+watch(is_bot, computeActiveFilters);
+watch(is_new, computeActiveFilters);
+watch(browser, computeActiveFilters);
+watch(language, computeActiveFilters);
+watch(referrer, computeActiveFilters);
+watch(utm_source, computeActiveFilters);
+watch(utm_medium, computeActiveFilters);
+watch(utm_campaign, computeActiveFilters);
+watch(country, computeActiveFilters);
+computeActiveFilters();
+
 
 function setRange(v, show) {
   store.commit('setRange', v);
@@ -102,10 +131,21 @@ function handleChangedDay(payload) {
   }
 }
 
+function removeFilter(setter) {
+  store.commit(setter, '');
+}
+function filterKeyToSetter(s) {
+  return 'set' + s[0].toUpperCase() + s.substring(1);
+}
 </script>
 
 <template>
   <div class="row">
+    <div class="col-12 mb-3" v-if="filters.length">
+      <button type="button" v-for="filter in filters" class="btn btn-dark mr-5 mb-1" @click="removeFilter(filterKeyToSetter(filter))">
+        <strong>{{ capitalizeFirstLetter(filter) }}</strong> = &nbsp;<code>{{ filterable[filter] }}</code> &nbsp; <a>&#x2715;</a>
+      </button>
+    </div>
     <div class="col-6">
       <ul class="nav nav-pills mb-1 d-inline-block">
         <li class="nav-item dropdown ms-auto">
@@ -152,6 +192,8 @@ function handleChangedDay(payload) {
 </template>
 
 <style>
+.mr-5 { margin-right: 5px }
+
 .vuejs3-datepicker {
   z-index: 9999999;
   min-width: 300px;

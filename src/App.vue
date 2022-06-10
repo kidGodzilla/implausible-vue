@@ -67,8 +67,20 @@ function handleQueryParams() {
     store.commit('setDomains', _hosts);
   }
 
+  store.commit('setPath', queryParams.path || '');
   store.commit('setHost', queryParams.host || '');
   store.commit('setRange', queryParams.range);
+
+  store.commit('setOs', queryParams.os || '');
+  store.commit('setDevice', queryParams.device || '');
+  store.commit('setIs_bot', queryParams.is_bot || '');
+  store.commit('setIs_new', queryParams.is_new || '');
+  store.commit('setBrowser', queryParams.browser || '');
+  store.commit('setLanguage', queryParams.language || '');
+  store.commit('setReferrer', queryParams.referrer || '');
+  store.commit('setUtm_source', queryParams.utm_source || '');
+  store.commit('setUtm_medium', queryParams.utm_medium || '');
+  store.commit('setUtm_campaign', queryParams.utm_campaign || '');
 }
 
 handleQueryParams();

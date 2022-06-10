@@ -34,3 +34,10 @@ defineProps({
     </div>
   </div>
 </template>
+
+<style scoped>
+.card-title {
+  position: relative;
+  top: -6px;
+}
+</style>

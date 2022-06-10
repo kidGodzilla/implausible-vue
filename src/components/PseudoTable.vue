@@ -5,13 +5,14 @@ import { mapGetters } from '../store/map-state';
 import { useStore } from 'vuex';
 const store = useStore();
 
-const { column, iconify, favicons, browserIcons, osIcons, links, linkPrefix, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
+const { column, iconify, favicons, browserIcons, osIcons, links, setter, linkPrefix, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
   column: String,
   iconify: Boolean,
   favicons: Boolean,
   browserIcons: Boolean,
   osIcons: Boolean,
   links: Boolean,
+  setter: String,
   linkPrefix: String,
   limit: Number,
   defaultText: String,
@@ -21,7 +22,8 @@ const { column, iconify, favicons, browserIcons, osIcons, links, linkPrefix, lim
   keyFormatter: Function,
 });
 
-const { host, range, summary, showVisitors } = mapGetters();
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, range, summary, showVisitors } = mapGetters();
+const watcherBundle = { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country };
 
 const valueColumnActual = computed(() => {
   return valueColumn || (showVisitors.value ? 'count(DISTINCT ip)' : 'count(*)');
@@ -33,60 +35,60 @@ const loading = ref(true);
 
 async function getData() {
   // console.log('valueColumnActual', valueColumnActual.value)
-  if (range.value.length === 7 || range.value > 1000) {
-    let summary_value = JSON.parse(JSON.stringify(summary.value));
-    let decryptor = await returnDecryptor(store);
-    let value_name = valueColumnActual.value;
-    let column_name = column + (showVisitors.value ? '__visitors':'');
-
-    if (loadTimes) column_name = 'loadTimes';
-    let values = summary_value[column_name];
-
-    if (values) {
-      let result = [];
-
-      if (loadTimes) {
-        result = values;
-
-      } else {
-        Object.keys(values).forEach(key => {
-          let o = {};
-          if (parseInt(key) == key) key = parseInt(key);
-          if (key == 'null') key = null;
-          o[value_name] = values[key];
-          o[column] = key;
-          result.push(o);
-        });
-      }
-
-      // Combine all null / falsey rows
-      let filtered = result.filter(x => !x[column_name]);
-
-      // Combine all null / falsey rows
-      if (filtered.length > 1) {
-        let total = filtered.map(x => x[value_name]).reduce((p, c) => p += c);
-        let new_result = result.filter(x => x[column]);
-        let newObj = {};
-        newObj[column] = null;
-        newObj[value_name] = total;
-        new_result.unshift(newObj);
-        result = new_result;
-      }
-
-      result.sort((b, a) => a[value_name] - b[value_name]);
-
-      // Attempt to decrypt
-      result.forEach(item => item[column] = decryptor(item[column]));
-
-      if (result.length > 10) result = result.slice(0, 10);
-
-      rows.value = result;
-      try { maxValue.value = result[0][value_name] } catch(e) { maxValue.value = 0 }
-      loading.value = false;
-    }
-
-    return;
-  }
+  // if (range.value.length === 7 || range.value > 1000) {
+  //   let summary_value = JSON.parse(JSON.stringify(summary.value));
+  //   let decryptor = await returnDecryptor(store);
+  //   let value_name = valueColumnActual.value;
+  //   let column_name = column + (showVisitors.value ? '__visitors':'');
+  //
+  //   if (loadTimes) column_name = 'loadTimes';
+  //   let values = summary_value[column_name];
+  //
+  //   if (values) {
+  //     let result = [];
+  //
+  //     if (loadTimes) {
+  //       result = values;
+  //
+  //     } else {
+  //       Object.keys(values).forEach(key => {
+  //         let o = {};
+  //         if (parseInt(key) == key) key = parseInt(key);
+  //         if (key == 'null') key = null;
+  //         o[value_name] = values[key];
+  //         o[column] = key;
+  //         result.push(o);
+  //       });
+  //     }
+  //
+  //     // Combine all null / falsey rows
+  //     let filtered = result.filter(x => !x[column_name]);
+  //
+  //     // Combine all null / falsey rows
+  //     if (filtered.length > 1) {
+  //       let total = filtered.map(x => x[value_name]).reduce((p, c) => p += c);
+  //       let new_result = result.filter(x => x[column]);
+  //       let newObj = {};
+  //       newObj[column] = null;
+  //       newObj[value_name] = total;
+  //       new_result.unshift(newObj);
+  //       result = new_result;
+  //     }
+  //
+  //     result.sort((b, a) => a[value_name] - b[value_name]);
+  //
+  //     // Attempt to decrypt
+  //     result.forEach(item => item[column] = decryptor(item[column]));
+  //
+  //     if (result.length > 10) result = result.slice(0, 10);
+  //
+  //     rows.value = result;
+  //     try { maxValue.value = result[0][value_name] } catch(e) { maxValue.value = 0 }
+  //     loading.value = false;
+  //   }
+  //
+  //   return;
+  // }
 
   let result = loadTimes ? await queryLoadTimes(store) : await queryCounts(store, column, limit || 10);
 
@@ -110,6 +112,12 @@ async function getData() {
   rows.value = result;
   try{ maxValue.value = result[0][valueColumnActual.value]; } catch(e) { maxValue.value = 0 }
   loading.value = false;
+}
+
+function localify(n) {
+  if (n == parseInt(n)) n = parseInt(n);
+  if (typeof n === 'number') n = n.toLocaleString();
+  return n;
 }
 
 function inferBrowserIcon(s, size = 48, browser = 'web') {
@@ -170,9 +178,22 @@ function maxLength(s, n = 40) {
 
 onMounted(getData);
 watch(host, getData);
+watch(path, getData);
 watch(range, getData);
-watch(summary, getData);
+// watch(summary, getData);
 watch(showVisitors, getData);
+// watch(watcherBundle, getData);
+watch(os, getData);
+watch(device, getData);
+watch(is_bot, getData);
+watch(is_new, getData);
+watch(browser, getData);
+watch(language, getData);
+watch(referrer, getData);
+watch(utm_source, getData);
+watch(utm_medium, getData);
+watch(utm_campaign, getData);
+watch(country, getData);
 </script>
 
 <template>
@@ -191,21 +212,30 @@ watch(showVisitors, getData);
           <i :class="addIcon(keyFormatter ? keyFormatter(row[column]) : row[column])"></i>&nbsp;&thinsp;
         </div>
 
-        <span v-if="!row[column]">{{ defaultText || 'None' }}</span>
+        <a class="text-decoration-underline cp" v-if="!row[column] && setter" @click="setter && store.commit(setter, 0)">{{ defaultText || 'None' }}</a>
+        <span v-else-if="!row[column]">{{ defaultText || 'None' }}</span>
 
-        <div v-if="favicons" style="display:inline-block">
+        <div v-if="favicons" style="display: inline-block">
           <img v-if="row[column] && favicons" :src="`https://logo.clearbit.com/${ columnToHost(row[column]) }`" onerror="this.onerror=null; this.src='default.png';">&nbsp;&thinsp;
         </div>
 
-        <div v-if="browserIcons" style="display:inline-block">
+        <div v-if="browserIcons" style="display: inline-block">
           <img v-if="row[column] && browserIcons" :src="`${ inferBrowserIcon(row[column]) }`">&nbsp;&thinsp;
         </div>
 
-        <div v-if="osIcons" style="display:inline-block">
+        <div v-if="osIcons" style="display: inline-block">
           <img v-if="row[column] && osIcons" :src="`${ inferOsIcon(row[column]) }`">&nbsp;&thinsp;
         </div>
 
-        <div v-if="links" style="display:inline-block">
+        <div v-if="setter" style="display: inline-block">
+          <a
+              v-if="row[column]" class="d-inline-block text-truncate cp"
+              @click="store.commit(setter, row[column])"
+          >
+            {{ maxLength( keyFormatter ? keyFormatter(row[column]) : row[column] ) }}
+          </a>
+        </div>
+        <div v-else-if="links" style="display: inline-block">
           <a
               v-if="row[column] && links" class="d-inline-block text-truncate"
               :href="`${ row[column].indexOf('http') ? 'http://':'' }${ linkPrefix || '' }${ row[column] }`"
@@ -215,10 +245,10 @@ watch(showVisitors, getData);
           </a>
         </div>
 
-        <span v-if="row[column] && !links">{{ keyFormatter ? keyFormatter(row[column]) : row[column] }}</span>
+        <span v-if="row[column] && !links && !setter">{{ keyFormatter ? keyFormatter(row[column]) : row[column] }}</span>
 
       </div>
-      <span class="float-right text-right pt-1">{{ valueFormatter ? valueFormatter(row[valueColumnActual]) : row[valueColumnActual] }}</span>
+      <span class="float-right text-right pt-1">{{ valueFormatter ? valueFormatter(row[valueColumnActual]) : localify(row[valueColumnActual]) }}</span>
     </div>
 
   </div>
