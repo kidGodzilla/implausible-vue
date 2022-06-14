@@ -17,7 +17,7 @@ const disabledDates = {
   preventDisableDateSelection: true,
 }
 
-const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, domains, event, range, rangeString, liveVisitors } = mapGetters();
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, domains, event, range, rangeString, liveVisitors, dark } = mapGetters();
 const store = useStore();
 
 const filterable = ref({ path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event });
@@ -143,7 +143,7 @@ function filterKeyToSetter(s) {
 <template>
   <div class="row">
     <div class="col-12 mb-3" v-if="filters.length">
-      <button type="button" v-for="filter in filters" class="btn btn-dark mr-5 mb-1" @click="removeFilter(filterKeyToSetter(filter))">
+      <button type="button" v-for="filter in filters" class="btn mr-5 mb-1" :class="{ 'btn-dark': dark, 'btn-secondary': !dark }" @click="removeFilter(filterKeyToSetter(filter))">
         <strong>{{ capitalizeFirstLetter(filter) }}</strong> = &nbsp;<code>{{ filterable[filter] }}</code> &nbsp; <a>&#x2715;</a>
       </button>
     </div>
