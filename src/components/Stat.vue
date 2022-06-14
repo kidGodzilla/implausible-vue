@@ -123,7 +123,7 @@ async function getPriorValue(comparison) {
 }
 
 const stat = computed(() => {
-  console.log('range', range);
+  // console.log('range', range);
   if (props.title === 'Visitors') {
     return statRaw.value;
 
