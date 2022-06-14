@@ -3,10 +3,12 @@ import { onMounted, ref, watch, computed } from 'vue'
 import { useStore } from 'vuex';
 import { query, whereClauseComponents } from "../store/query-utils";
 import { mapGetters } from "../store/map-state";
+import Popper from "vue3-popper";
 const store = useStore();
 
 const props = defineProps({
   title: String,
+  tooltip: String,
   underline: Boolean,
   muted: { type: Boolean, default: true },
 });
@@ -31,7 +33,7 @@ function localify(n) {
   return n;
 }
 
-function fmtMSS(s) { return(s-(s%=60))/60+('m ')+parseInt(s) }
+function fmtMSS(s) { return(s-(s%=60))/60+('m ')+parseInt(s)+'s' }
 
 let percentChange = computed(() => {
   let change = (statRaw.value - prior.value) / prior.value;
@@ -160,7 +162,14 @@ watch(event, getValue);
 
 <template>
   <div class="col-6 col-md-3" :class="{ cp: underline, selected: !muted && !underline }">
-    <h6 class="card-subtitle mb-2" :class="{ 'text-muted': muted, 'text-decoration-underline': underline, 'link-color': underline }">{{ title }}</h6>
+
+    <h6 class="card-subtitle mb-2" :class="{ 'text-muted': muted, 'text-decoration-underline': underline, 'link-color': underline }">
+      <Popper v-if="tooltip" hover :content="tooltip" placement="bottom">
+        {{ title }}
+      </Popper>
+      <span v-else>{{ title }}</span>
+    </h6>
+
     <h4 class="card-title mb-1">{{ localify(stat) }}</h4>
     <span class="badge rounded-pill" v-show="percentChange" :class="{ 'bg-danger': isNeg(percentChange), 'bg-success': !isNeg(percentChange) }">{{ (percentChange > 0 ? '+':'') + percentFormatter(percentChange) }}</span>
   </div>

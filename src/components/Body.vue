@@ -5,6 +5,7 @@ import Card from '../components/Card.vue'
 import Stat from '../components/Stat.vue'
 import PseudoTable from '../components/PseudoTable.vue'
 import SvgMap from '../components/svgMap.vue'
+import Popper from "vue3-popper";
 
 // Formatters
 const twoPlaces = v => v.toFixed(2);
@@ -118,10 +119,10 @@ watch(range, periodicRefresh)
         <Card>
 
           <div class="row p-1 pt-2">
-            <Stat title="Visitors" :muted="false" :underline="!showVisitors" @click="store.commit('setShowVisitors', true)" />
+            <Stat title="Visitors" tooltip="Unique Visitors in Time Period" :muted="false" :underline="!showVisitors" @click="store.commit('setShowVisitors', true)" />
             <Stat title="Total Pageviews" :muted="false" :underline="showVisitors" @click="store.commit('setShowVisitors', false)" />
-            <Stat title="Bounce Rate" />
-            <Stat title="Session Length" />
+            <Stat title="Bounce Rate" tooltip="One-page Visits / Visitor Count" />
+            <Stat title="Session Length" tooltip="Average Session Length" />
           </div>
 
           <Visits />
@@ -328,13 +329,17 @@ watch(range, periodicRefresh)
     <div class="row mt-3">
       <div class="col-md-12">
         <Card>
-          <h5 class="card-title float-left tweaked">Events</h5>
+          <h5 class="card-title float-left tweaked">
+            <Popper hover content="Custom events (Javascript)">
+              Events
+            </Popper>
+          </h5>
 
           <div class="mt-5">
             <small class="text-muted w-495 d-inline-block">Event Name</small>
             <small class="text-muted w-495 d-inline-block text-right float-right">{{ visitorsString === 'Visitors' ? 'Events from Unique Visitors' : 'Event Count' }}</small>
 
-            <PseudoTable column="event" setter="setEvent" />
+            <PseudoTable column="event" setter="setEvent" :keyFormatter="capitalizeFirstLetter" />
           </div>
         </Card>
       </div>

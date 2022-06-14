@@ -103,6 +103,20 @@ addEventListener('popstate', event => {
 </template>
 
 <style>
+:root {
+  --popper-theme-background-color: #111;
+  --popper-theme-background-color-hover: #111;
+  --popper-theme-text-color: #ffffff;
+  --popper-theme-border-width: 0px;
+  --popper-theme-border-style: solid;
+  --popper-theme-border-radius: 3px;
+  --popper-theme-padding: 10px;
+  --popper-theme-box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.25);
+}
+.popper {
+  font-size: 14px;
+}
+
 .svgMap-map-wrapper { background: transparent }
 .text-right { text-align: right !important }
 .min-357 { min-height: 357px; height: 100% }
