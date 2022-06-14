@@ -201,6 +201,8 @@ export default createStore({
 
             let values = ranges[range];
 
+            if (parseInt(range) == range) range = parseInt(range);
+
             // Daily: -2,-3,-4,-5,-6,-7..-31
             if (range < -1 && range > -32) {
                 let val = range * -1;
@@ -219,8 +221,8 @@ export default createStore({
 
             // Annual: 2022
             if (range > 1000 && range < 3000) {
-                let r1 = daysAgoCount(range);
-                let D = new Date(range);
+                let r1 = daysAgoCount(range+'');
+                let D = new Date(range+'');
                 D = D.setFullYear(D.getFullYear()+1);
                 let r2 = daysAgoCount(D);
                 if (r2 < 0) r2 = 0;
