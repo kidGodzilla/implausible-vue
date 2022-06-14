@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useStore } from 'vuex';
 import { query, whereClauseComponents, isoDate } from "../store/query-utils";
 import AreaChart from '../vue-morris/components/area-chart.vue'
+import Popper from "vue3-popper";
 const store = useStore();
 
 import { mapGetters } from '../store/map-state'
@@ -145,7 +146,9 @@ watch(event, fetchData);
         :hoverCallback="hoverCallback" @click="chartClick" @dblclick="chartClickOut"
         grid="true" grid-text-weight="bold">
     </area-chart>
-<!--    <i class="bi bi-exclamation-triangle-fill top-right" v-show="roughEdge" title="Incomplete data"></i>-->
+<!--    <Popper class="top-right" v-if="roughEdge" hover content="Incomplete data for final time period in chart" placement="left">-->
+<!--      <i class="bi bi-exclamation-triangle-fill"></i>-->
+<!--    </Popper>-->
 <!--    <div class="top-right" v-show="roughEdge">-->
 <!--      <i class="bi bi-exclamation-triangle-fill"></i>&nbsp;-->
 <!--      Incomplete datapoint-->
@@ -168,15 +171,15 @@ watch(event, fetchData);
     z-index: 9;
     top: 0;
   }
-  div.top-right {
-    transform: rotate(-90deg);
-    opacity: 0.7;
-    font-size:1rem;
-    right: -4.5rem;
-    top: 6.5rem;
-  }
+  /*div.top-right {*/
+  /*  transform: rotate(-90deg);*/
+  /*  opacity: 0.7;*/
+  /*  font-size:1rem;*/
+  /*  right: -4.5rem;*/
+  /*  top: 6.5rem;*/
+  /*}*/
   body.dark .top-right {
-    right: -3.5rem;
+    /*right: -3.5rem;*/
     color: #fff;
   }
 
