@@ -332,7 +332,7 @@ watch(range, periodicRefresh)
 
           <div class="mt-5">
             <small class="text-muted w-495 d-inline-block">Event Name</small>
-            <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString === 'Visitors' ? 'Unique visitors' : 'Event count' }}</small>
+            <small class="text-muted w-495 d-inline-block text-right float-right">{{ visitorsString === 'Visitors' ? 'Events from Unique Visitors' : 'Event Count' }}</small>
 
             <PseudoTable column="event" setter="setEvent" />
           </div>
