@@ -111,9 +111,14 @@ function triggerPicker(range) {
   }, 123);
 }
 
+function handleChangedYear(payload) {
+  // console.log('handleChangedYear', payload);
+  let { year, timestamp } = payload;
+  if (year) setRange(year);
+}
+
 function handleChangedDay(payload) {
   // console.log('handleChangedDay', payload);
-
   if (startingView.value === 'year') {
     let D = new Date(payload);
     let year = D.getFullYear();
@@ -186,7 +191,7 @@ function filterKeyToSetter(s) {
             <a class="dropdown-item cp" @click="triggerPicker('year');">Custom Year</a>
           </div>
         </li>
-        <datepicker v-if="showPicker" name="datepick" :value="picked" :disabled-dates="minimumView == 'day' ? disabledDates : null" :initial-view="startingView" :minimum-view="minimumView" :maximum-view="maximumView" @input="handleChangedDay"></datepicker>
+        <datepicker v-if="showPicker" name="datepick" :value="picked" :disabled-dates="minimumView == 'day' ? disabledDates : null" :initial-view="startingView" :minimum-view="minimumView" :maximum-view="maximumView" @input="handleChangedDay" @changed-year="handleChangedYear"></datepicker>
       </ul>
     </div>
   </div>
