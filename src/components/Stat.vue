@@ -164,7 +164,7 @@ watch(event, getValue);
   <div class="col-6 col-md-3" :class="{ cp: underline, selected: !muted && !underline }">
 
     <h6 class="card-subtitle mb-2" :class="{ 'text-muted': muted, 'text-decoration-underline': underline, 'link-color': underline }">
-      <Popper v-if="tooltip" hover :content="tooltip" placement="bottom">
+      <Popper v-if="tooltip" :class="{ 'text-decoration-underline': underline }" hover :content="tooltip" placement="bottom">
         {{ title }}
       </Popper>
       <span v-else>{{ title }}</span>
