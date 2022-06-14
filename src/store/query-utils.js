@@ -82,7 +82,7 @@ export function isoDate(d) {
     return d.toISOString().slice(0,10);
 }
 
-export function whereClauseComponents(store, skipDates, comparison) {
+export function whereClauseComponents(store, skipDates, comparison, excludeEvents) {
     let components = [], SIV;
 
     if (store.state.key) {
@@ -158,6 +158,9 @@ export function whereClauseComponents(store, skipDates, comparison) {
     if (store.state.language) components.push(`lang = '${ store.state.language }'`);
     if (store.state.country) components.push(`country_code = '${ store.state.country }'`);
 
+    // Event name
+    if (!excludeEvents) components.push(`event = '${ store.state.event || 'pageview' }'`);
+
     // Start / End Range or Prior (comparison) period
     if (comparison) components.push(`date BETWEEN '${ isoDate( store.state.comparisonStart ) }' AND '${ isoDate( store.state.comparisonEnd ) }'`);
     else if (!skipDates) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
@@ -213,7 +216,7 @@ export async function queryCounts(store, column = 'hour', max = 10) {
     let direction = isTimeseries ? 'ASC' : 'DESC';
     let limit = isTimeseries ? '' : ` LIMIT ${ max }`;
 
-    let sql = `SELECT ${ column }, ${ columnValue } FROM visits${ whereClauseComponents(store) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
+    let sql = `SELECT ${ column }, ${ columnValue } FROM visits${ whereClauseComponents(store, 0, 0, column === 'event' && !store.state.event) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
     let res = await query(sql);
 
     // console.log('queryCounts:', sql, res);

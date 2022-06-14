@@ -13,7 +13,7 @@ const props = defineProps({
 
 const prior = ref('0');
 const statRaw = ref('0');
-const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, range, start, summary } = mapGetters();
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, range, start, summary } = mapGetters();
 
 // Visitors: SELECT count(DISTINCT ip) from visits
 // Pageviews: SELECT count(*) from VISITS whereclause
@@ -153,6 +153,7 @@ watch(utm_source, getValue);
 watch(utm_medium, getValue);
 watch(utm_campaign, getValue);
 watch(country, getValue);
+watch(event, getValue);
 
 // watch(statRaw, () => getValue(1))
 </script>

@@ -30,7 +30,7 @@ const store = useStore();
 
 const countries = ref({});
 
-const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, dark, summary, showVisitors } = mapGetters();
+const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, dark, summary, showVisitors } = mapGetters();
 
 const visitorsString = computed(() => {
   return showVisitors.value ? 'Visitors' : 'Pageviews';
@@ -88,14 +88,9 @@ function periodicRefresh() {
 periodicRefresh();
 
 onMounted(getCountryData);
-// onMounted(getSummaryData);
 watch(host, getCountryData);
-// watch(host, getSummaryData);
 watch(path, getCountryData);
-// watch(path, getSummaryData);
 watch(range, getCountryData);
-// watch(range, getSummaryData);
-// watch(summary, getCountryData);
 watch(showVisitors, getCountryData);
 watch(os, getCountryData);
 watch(device, getCountryData);
@@ -108,18 +103,7 @@ watch(utm_source, getCountryData);
 watch(utm_medium, getCountryData);
 watch(utm_campaign, getCountryData);
 watch(country, getCountryData);
-// rm later
-// watch(os, getSummaryData);
-// watch(device, getSummaryData);
-// watch(is_bot, getSummaryData);
-// watch(is_new, getSummaryData);
-// watch(browser, getSummaryData);
-// watch(language, getSummaryData);
-// watch(referrer, getSummaryData);
-// watch(utm_source, getSummaryData);
-// watch(utm_medium, getSummaryData);
-// watch(utm_campaign, getSummaryData);
-// watch(country, getSummaryData);
+watch(event, getCountryData);
 
 watch(range, periodicRefresh)
 </script>
@@ -338,6 +322,21 @@ watch(range, periodicRefresh)
 
         </Card>
 
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <Card>
+          <h5 class="card-title float-left tweaked">Events</h5>
+
+          <div class="mt-5">
+            <small class="text-muted w-495 d-inline-block">Event Name</small>
+            <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString === 'Visitors' ? 'Unique visitors' : 'Event count' }}</small>
+
+            <PseudoTable column="event" setter="setEvent" />
+          </div>
+        </Card>
       </div>
     </div>
 

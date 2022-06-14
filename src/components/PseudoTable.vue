@@ -22,8 +22,8 @@ const { column, iconify, favicons, browserIcons, osIcons, links, setter, linkPre
   keyFormatter: Function,
 });
 
-const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, range, summary, showVisitors } = mapGetters();
-const watcherBundle = { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country };
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, range, summary, showVisitors } = mapGetters();
+const watcherBundle = { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event };
 
 const valueColumnActual = computed(() => {
   return valueColumn || (showVisitors.value ? 'count(DISTINCT ip)' : 'count(*)');
@@ -34,62 +34,6 @@ const maxValue = ref(0);
 const loading = ref(true);
 
 async function getData() {
-  // console.log('valueColumnActual', valueColumnActual.value)
-  // if (range.value.length === 7 || range.value > 1000) {
-  //   let summary_value = JSON.parse(JSON.stringify(summary.value));
-  //   let decryptor = await returnDecryptor(store);
-  //   let value_name = valueColumnActual.value;
-  //   let column_name = column + (showVisitors.value ? '__visitors':'');
-  //
-  //   if (loadTimes) column_name = 'loadTimes';
-  //   let values = summary_value[column_name];
-  //
-  //   if (values) {
-  //     let result = [];
-  //
-  //     if (loadTimes) {
-  //       result = values;
-  //
-  //     } else {
-  //       Object.keys(values).forEach(key => {
-  //         let o = {};
-  //         if (parseInt(key) == key) key = parseInt(key);
-  //         if (key == 'null') key = null;
-  //         o[value_name] = values[key];
-  //         o[column] = key;
-  //         result.push(o);
-  //       });
-  //     }
-  //
-  //     // Combine all null / falsey rows
-  //     let filtered = result.filter(x => !x[column_name]);
-  //
-  //     // Combine all null / falsey rows
-  //     if (filtered.length > 1) {
-  //       let total = filtered.map(x => x[value_name]).reduce((p, c) => p += c);
-  //       let new_result = result.filter(x => x[column]);
-  //       let newObj = {};
-  //       newObj[column] = null;
-  //       newObj[value_name] = total;
-  //       new_result.unshift(newObj);
-  //       result = new_result;
-  //     }
-  //
-  //     result.sort((b, a) => a[value_name] - b[value_name]);
-  //
-  //     // Attempt to decrypt
-  //     result.forEach(item => item[column] = decryptor(item[column]));
-  //
-  //     if (result.length > 10) result = result.slice(0, 10);
-  //
-  //     rows.value = result;
-  //     try { maxValue.value = result[0][value_name] } catch(e) { maxValue.value = 0 }
-  //     loading.value = false;
-  //   }
-  //
-  //   return;
-  // }
-
   // if column is entrypages or ExitPagecount
   let result = [];
   if (valueColumn === 'AvgLoadTime') result = await queryLoadTimes(store);
@@ -199,6 +143,7 @@ watch(utm_source, getData);
 watch(utm_medium, getData);
 watch(utm_campaign, getData);
 watch(country, getData);
+watch(event, getData);
 </script>
 
 <template>

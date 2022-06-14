@@ -84,6 +84,7 @@ function handleQueryParams() {
   store.commit('setUtm_source', queryParams.utm_source || '');
   store.commit('setUtm_medium', queryParams.utm_medium || '');
   store.commit('setUtm_campaign', queryParams.utm_campaign || '');
+  store.commit('setEvent', queryParams.event || '');
 }
 
 handleQueryParams();
