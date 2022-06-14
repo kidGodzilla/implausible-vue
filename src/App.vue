@@ -122,7 +122,7 @@ addEventListener('popstate', event => {
 .min-357 { min-height: 357px; height: 100% }
 .bg-grey:hover { background: #2847b714 }
 .bg-grey { background: #2847b729 }
-body.dark .bg-grey:hover { background: rgba(255, 255, 255, 0.075) }
+body.dark .bg-grey:hover { background: rgba(255, 255, 255, 0.15) }
 body.dark .bg-grey { background: rgba(255, 255, 255, 0.075) }
 .w-495 { width: 49.5% !important }
 .float-right { float: right }
@@ -139,6 +139,8 @@ body:not(.dark) { background-color: #fafafa }
 .card { box-shadow: 0 1px 3px 0 rgba(0,0,0,.04),0 1px 2px 0 rgba(0,0,0,.02); border: 1px solid rgba(0,0,0,.05) }
 .shaded img { max-height: 18px; max-width: 18px; margin-top: -4px; margin-left: -3px }
 .pseudotable > div { background: #00000007; padding-right: 6px }
+.pseudotable>div:hover { background: #00000010 }
+body.dark .pseudotable>div:hover { background: #ffffff10 }
 .shaded a { margin-bottom: -5px; max-width: 65vw }
 body:not(.dark) .shaded a { color: #000; }
 body.dark .shaded a { color: #ebebeb; }
