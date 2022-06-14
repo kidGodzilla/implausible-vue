@@ -82,7 +82,7 @@ export function isoDate(d) {
     return d.toISOString().slice(0,10);
 }
 
-export function whereClauseComponents(store, skipDates) {
+export function whereClauseComponents(store, skipDates, comparison) {
     let components = [], SIV;
 
     if (store.state.key) {
@@ -158,8 +158,9 @@ export function whereClauseComponents(store, skipDates) {
     if (store.state.language) components.push(`lang = '${ store.state.language }'`);
     if (store.state.country) components.push(`country_code = '${ store.state.country }'`);
 
-    // Start / End Range
-    if (store.state.start && store.state.end && !skipDates) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
+    // Start / End Range or Prior (comparison) period
+    if (comparison) components.push(`date BETWEEN '${ isoDate( store.state.comparisonStart ) }' AND '${ isoDate( store.state.comparisonEnd ) }'`);
+    else if (!skipDates) components.push(`date BETWEEN '${ isoDate( store.state.start ) }' AND '${ isoDate( store.state.end ) }'`);
 
     return (components.length ? ` WHERE ` : '') + (components.join(' AND ') || '');
 }

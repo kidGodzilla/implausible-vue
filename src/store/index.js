@@ -38,6 +38,8 @@ export default createStore({
             key: '',
             start: daysAgo(0),
             end: daysAgo(0),
+            comparisonStart: daysAgo(0),
+            comparisonEnd: daysAgo(0),
             range: '1',
             rangeString: 'Latest',
             liveVisitors: 0,
@@ -66,6 +68,8 @@ export default createStore({
         path: state => state.path,
         start: state => state.start,
         end: state => state.end,
+        comparisonStart: state => state.comparisonStart,
+        comparisonEnd: state => state.comparisonEnd,
         range: state => state.range,
         rangeString: state => state.rangeString,
         liveVisitors: state => state.liveVisitors,
@@ -157,6 +161,12 @@ export default createStore({
         setEnd (state, end) {
             state.end = end;
         },
+        setComparisonStart (state, start) {
+            state.comparisonStart = start;
+        },
+        setComparisonEnd (state, end) {
+            state.comparisonEnd = end;
+        },
         setLiveVisitors (state, count) {
             state.liveVisitors = count;
         },
@@ -212,6 +222,11 @@ export default createStore({
             state.rangeString = values[0];
             state.start = daysAgo(values[1]);
             state.end = daysAgo(values[2]);
+
+            // Comparison values
+            const diff = state.end - state.start;
+            state.comparisonEnd = state.start;
+            state.comparisonStart = state.start - diff;
 
             if (parseInt(range) == range) range = parseInt(range);
             state.range = range;
