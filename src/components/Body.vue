@@ -148,48 +148,86 @@ watch(range, periodicRefresh)
                 <a class="nav-link" data-bs-toggle="tab" href="#medium">Medium</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#source">Source</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#campaign">Campaign</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#campaign">Campaign</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#term">Term</a>
               </li>
             </ul>
 
 
             <div class="tab-content mt-5">
               <div class="tab-pane fade active show" id="referrers">
-                <small class="text-muted w-495 d-inline-block">Source</small>
+                <small class="text-muted w-495 d-inline-block">
+                  <Popper hover content="Referrer Domain">
+                    Source
+                  </Popper>
+                </small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="referer_host" setter="setReferrer" :favicons="true" :links="true" defaultText="Direct / None" />
               </div>
 
               <div class="tab-pane fade show" id="referrer_urls">
-                <small class="text-muted w-495 d-inline-block">Source</small>
+                <small class="text-muted w-495 d-inline-block">
+                  <Popper hover content="Full Referrer URL">
+                    Source
+                  </Popper>
+                </small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
                 <PseudoTable column="referer_url" :favicons="true" :links="true" defaultText="Direct / None" />
               </div>
 
               <div class="tab-pane fade show" id="medium">
-                <small class="text-muted w-495 d-inline-block">Source</small>
+                <small class="text-muted w-495 d-inline-block">
+                  <Popper hover content="Marketing Channel: Social, Organic, Paid, Email, Affiliate, etc.">
+                      Utm_medium
+                  </Popper>
+                </small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="utm_medium"  setter="setUtm_medium" />
-              </div>
+                <PseudoTable column="utm_medium" :limit="5" setter="setUtm_medium" />
 
-              <div class="tab-pane fade show" id="source">
-                <small class="text-muted w-495 d-inline-block">Source</small>
+                <small class="text-muted w-495 d-inline-block">
+                  <Popper hover content="Site within channel.">
+                    Utm_source
+                  </Popper>
+                </small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="utm_source" setter="setUtm_source" />
+                <PseudoTable column="utm_source" :limit="5" setter="setUtm_source" />
               </div>
 
               <div class="tab-pane fade show" id="campaign">
-                <small class="text-muted w-495 d-inline-block">Source</small>
+                <small class="text-muted w-495 d-inline-block">
+                  <Popper hover content="Name to describe your marketing campaign">
+                    Utm_campaign
+                  </Popper>
+                </small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="utm_campaign" setter="setUtm_campaign" />
+                <PseudoTable column="utm_campaign" :limit="5" setter="setUtm_campaign" />
+
+                <small class="text-muted w-495 d-inline-block">
+                  <Popper hover content="Used to differentiate links within a single campaign">
+                    Utm_content
+                  </Popper>
+                </small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
+
+                <PseudoTable column="utm_content" :limit="5" setter="setUtm_content" />
+              </div>
+
+              <div class="tab-pane fade show" id="term">
+                <small class="text-muted w-495 d-inline-block">
+                  <Popper hover content="Optional, often used to track search terms in paid marketing campaigns">
+                    Utm_term
+                  </Popper>
+                </small>
+                <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
+
+                <PseudoTable column="utm_term" setter="setUtm_term" />
               </div>
             </div>
 
