@@ -4,7 +4,7 @@ const schedule = require('node-schedule');
 const fs = require("fs");
 
 function downloadSqlite() {
-    download('https://analytics.servers.do/analytics.sqlite3?i='+(Math.floor(Math.random() * 9999999)), `${__dirname}/public`).then(() => {
+    download(process.env.VITE_BACKEND_URL + '/analytics.sqlite3?i='+(Math.floor(Math.random() * 9999999)), `${__dirname}/public`).then(() => {
         console.log('Downloaded analytics.sqlite3');
 
         fs.copyFile('./public/analytics.sqlite3', './public/analytics.sqlite3.png', (err) => {

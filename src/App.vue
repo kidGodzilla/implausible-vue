@@ -27,7 +27,7 @@ function handleQueryParams() {
 
   async function fetchKeypair() {
     let url = '/keypair';
-    if (location.hostname === 'localhost') url = 'https://analytics.servers.do/keypair';
+    if (location.hostname === 'localhost') url = import.meta.env.VITE_BACKEND_URL + '/keypair';
     let response = await fetch(url);
     let json = await response.json();
     let { public_key, private_key } = json;
