@@ -193,7 +193,8 @@ watch(event, fetchData);
     background: linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(255,255,255,0) 100%);
   }
   body.dark .edge {
-    background: linear-gradient(270deg, rgba(32,55,76,1) 0%, rgba(32,55,76,1) 25%, rgba(32,55,76,0) 100%);
+    /*background: linear-gradient(270deg, rgba(32,55,76,1) 0%, rgba(32,55,76,1) 25%, rgba(32,55,76,0) 100%);*/
+    background: linear-gradient(270deg, rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) 0%, rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) 25%, rgba(var(--bs-dark-rgb), 0) 100%);
   }
 </style>
 <style>
