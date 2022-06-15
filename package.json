@@ -20,6 +20,7 @@
     "serve": "^13.0.2",
     "sql.js-httpvfs": "^0.8.11",
     "svg-pan-zoom": "^3.6.1",
+    "vite-plugin-html-env": "^1.1.2",
     "vue": "^3.2.25",
     "vue3-popper": "^1.5.0",
     "vuejs3-datepicker": "^1.0.6",
