@@ -61,7 +61,8 @@ function addCustomDomain() {
   var p = prompt('Enter domain name');
 
   if (p) {
-    p = p.toLowerCase().trim().replace('www.', '');
+    p = p.toLowerCase().trim().replace('www.', '').replace('https://', '').replace('http://', '');
+    if (p && p.includes('/')) p = p.split('/')[0];
     if (p) window.history.pushState('', '', `?host=${ p }&range=${ range.value }`);
 
     // Commit updates to Vuex
