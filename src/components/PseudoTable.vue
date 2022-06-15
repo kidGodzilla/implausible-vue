@@ -37,9 +37,9 @@ async function getData() {
   // if column is entrypages or ExitPagecount
   let result = [];
   if (valueColumn === 'AvgLoadTime') result = await queryLoadTimes(store);
-  else if (valueColumn === 'EntrypageCount') result = await queryEntryExitPages(store, column, valueColumn, limit || 10);
-  else if (valueColumn === 'ExitPagecount') result = await queryEntryExitPages(store, column, valueColumn, limit || 10);
-  else result = await queryCounts(store, column, limit || 10);
+  else if (valueColumn === 'EntrypageCount') result = await queryEntryExitPages(store, column, valueColumn, limit || 100);
+  else if (valueColumn === 'ExitPagecount') result = await queryEntryExitPages(store, column, valueColumn, limit || 100);
+  else result = await queryCounts(store, column, limit || 100);
 
   // console.log('result', column, valueColumnActual.value, result);
 

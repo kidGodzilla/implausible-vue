@@ -186,7 +186,7 @@ export async function queryLoadTimes(store) {
 
     const SIV = store.state.key ? CryptoJS.SIV.create(CryptoJS.enc.Hex.parse(store.state.key)) : null;
 
-    let sql = `SELECT pathname, AVG(load_time) as AvgLoadTime from visits${ whereClauseComponents(store) } GROUP BY pathname ORDER BY AvgLoadTime DESC LIMIT 10;`;
+    let sql = `SELECT pathname, AVG(load_time) as AvgLoadTime from visits${ whereClauseComponents(store) } GROUP BY pathname ORDER BY AvgLoadTime DESC LIMIT 100;`;
     let res = await query(sql);
 
     // console.log('queryLoadTimes:', sql, res);
