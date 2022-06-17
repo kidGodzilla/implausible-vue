@@ -211,5 +211,8 @@ function filterKeyToSetter(s) {
 body.dark .vuejs3-datepicker__value { background: rgb(32,55,76); }
 body.dark .vuejs3-datepicker__calendar-actionarea { background: rgb(32,55,76) }
 
+body.dark .vuejs3-datepicker__calendar-actionarea .prev:not(.disabled),
+body.dark .vuejs3-datepicker__calendar-actionarea .next:not(.disabled) { background: #ffffff66; }
+
 .favicon { height: 32px; margin-top: -7px; margin-right: 10px; border-radius: 2px; }
 </style>

@@ -78,7 +78,16 @@ function handleQueryParams() {
   store.commit('setTheme', queryParams.theme || '');
   store.commit('setEmbed', queryParams.embed || false);
   store.commit('setBackground', queryParams.background || '');
-  if (queryParams.theme) store.commit('setDark', queryParams.theme === 'dark');
+
+
+  if (queryParams.theme) {
+    if (queryParams.theme.includes('-')) {
+      let themeParts = queryParams.theme.split('-');
+      store.commit('setDark', themeParts[0] === 'dark');
+    } else {
+      store.commit('setDark', queryParams.theme === 'dark');
+    }
+  }
 
   store.commit('setOs', queryParams.os || '');
   store.commit('setDevice', queryParams.device || '');
@@ -144,7 +153,7 @@ body:not(.dark) { background-color: #fafafa }
 .dot { margin-left: 16px; margin-right: 4px; transform-origin: center center; transform: scale(4) translateY(-0.85px) }
 .card { box-shadow: 0 1px 3px 0 rgba(0,0,0,.04),0 1px 2px 0 rgba(0,0,0,.02); border: 1px solid rgba(0,0,0,.05) }
 .shaded img { max-height: 18px; max-width: 18px; margin-top: -4px; margin-left: -3px }
-.pseudotable { max-height: 368px; overflow-y: scroll; }
+.pseudotable { max-height: 368px; overflow-y: auto; }
 .pseudotable > div { background: #00000007; padding-right: 6px }
 .pseudotable>div:hover { background: #00000010 }
 body.dark .pseudotable>div:hover { background: #ffffff10 }
@@ -176,6 +185,9 @@ body.dark .svgMap-country { stroke: #ffffff33 }
 body.dark .svgMap-tooltip-content, body.dark .svgMap-tooltip-title {
   color: #222 !important; text-transform: capitalize;
 }
+
+/* Theme fix */
+body.quartz.dark .dropdown-menu { background: rgba(var(--bs-dark-rgb), 1); }
 
 @media screen and (max-width: 1200px) {
   .w-495 { width: 49% !important }

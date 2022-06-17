@@ -22,7 +22,17 @@ function setBackground() {
 }
 
 function fixBodyClass() {
-  document.querySelector('#theme').href = `https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.1.3/${ dark.value ? import.meta.env.VITE_BOOTSWATCH_THEME_DARK : import.meta.env.VITE_BOOTSWATCH_THEME_LIGHT }/bootstrap.min.css`;
+  let themeName = dark.value ? import.meta.env.VITE_BOOTSWATCH_THEME_DARK : import.meta.env.VITE_BOOTSWATCH_THEME_LIGHT;
+
+  if (theme.value && theme.value.includes('-')) {
+    let themeParts = theme.value.split('-');
+    themeName = themeParts[1];
+  }
+
+  document.body.removeAttribute('class');
+  document.body.classList.add(themeName);
+
+  document.querySelector('#theme').href = `https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.1.3/${ themeName }/bootstrap.min.css`;
 
   if (dark.value) document.body.classList.add('dark');
   else document.body.classList.remove('dark');
