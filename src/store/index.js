@@ -27,6 +27,10 @@ function fixSearch(state) {
 
     if (state.event !== '') targetSearch += `&event=${ state.event }`;
 
+    if (state.background !== '') targetSearch += `&background=${ state.background }`;
+    if (state.theme !== '') targetSearch += `&theme=${ state.theme }`;
+    if (state.embed) targetSearch += `&embed=${ state.embed }`;
+
     if (location.search !== targetSearch) window.history.pushState('', '', targetSearch);
 }
 
@@ -34,6 +38,9 @@ export default createStore({
     state () {
         return {
             publicKey: '',
+            theme: '',
+            embed: false,
+            background: '',
             domains: [],
             host: '',
             path: '',
@@ -64,6 +71,9 @@ export default createStore({
     },
     getters: {
         domains: state => state.domains,
+        background: state => state.background,
+        embed: state => state.embed,
+        theme: state => state.theme,
         dark: state => state.dark,
         key: state => state.key,
         publicKey: state => state.publicKey,
@@ -95,6 +105,15 @@ export default createStore({
     mutations: {
         setDark (state, bool) {
             state.dark = bool;
+        },
+        setTheme (state, theme) {
+            state.theme = theme;
+        },
+        setEmbed (state, bool) {
+            state.embed = bool;
+        },
+        setBackground (state, background) {
+            state.background = background;
         },
         setKey (state, key) {
             state.key = key;
