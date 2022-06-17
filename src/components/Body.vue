@@ -31,7 +31,7 @@ const store = useStore();
 
 const countries = ref({});
 
-const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, dark, summary, showVisitors } = mapGetters();
+const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, dark, summary, showVisitors, embed } = mapGetters();
 
 const visitorsString = computed(() => {
   return showVisitors.value ? 'Visitors' : 'Pageviews';
@@ -110,7 +110,7 @@ watch(range, periodicRefresh)
 </script>
 
 <template>
-  <div class="container mt-5">
+  <div :class="{ container: !embed, 'mt-5': !embed }">
 
     <Subnav />
 

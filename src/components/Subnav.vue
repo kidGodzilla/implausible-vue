@@ -17,7 +17,7 @@ const disabledDates = {
   preventDisableDateSelection: true,
 }
 
-const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, domains, event, range, rangeString, liveVisitors, dark } = mapGetters();
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, domains, event, range, rangeString, liveVisitors, dark, embed } = mapGetters();
 const store = useStore();
 
 const filterable = ref({ path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event });
@@ -148,12 +148,12 @@ function filterKeyToSetter(s) {
 
 <template>
   <div class="row">
-    <div class="col-12 mb-3" v-if="filters.length">
+    <div class="col-12 mb-3" v-show="!embed" v-if="filters.length">
       <button type="button" v-for="filter in filters" class="btn mr-5 mb-1" :class="{ 'btn-dark': dark, 'btn-secondary': !dark }" @click="removeFilter(filterKeyToSetter(filter))">
         <strong>{{ capitalizeFirstLetter(filter) }}</strong> = &nbsp;<code>{{ filterable[filter] }}</code> &nbsp; <a>&#x2715;</a>
       </button>
     </div>
-    <div class="col-6">
+    <div class="col-6" v-show="!embed">
       <ul class="nav nav-pills mb-1 d-inline-block">
         <li class="nav-item dropdown ms-auto">
           <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
@@ -172,7 +172,7 @@ function filterKeyToSetter(s) {
       <span class="current-visitors d-none d-md-inline-block">&nbsp;{{ liveVisitors ? `${ liveVisitors } current visitor${ liveVisitors==1? '' : 's' }` : 'No current visitors' }}</span>
     </div>
 
-    <div class="col-6">
+    <div class="col-6" v-show="!embed">
       <ul class="nav nav-pills mb-1">
         <li class="nav-item dropdown ms-auto">
           <a class="nav-link right cp" :class="{ 'dropdown-toggle': !showPicker }" data-bs-toggle="dropdown" role="button">{{ rangeString }}</a>

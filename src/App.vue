@@ -24,6 +24,7 @@ function handleQueryParams() {
 
   let queryParams = {};
   location.search.slice(1).split('&').map(s => s.split('=')).forEach(a => queryParams[a[0]] = a[1]);
+  Object.keys(queryParams).map(x => queryParams[x] = decodeURIComponent(queryParams[x]));
 
   async function fetchKeypair() {
     let url = '/keypair';
@@ -73,6 +74,11 @@ function handleQueryParams() {
   store.commit('setPath', queryParams.path || '');
   store.commit('setHost', queryParams.host || '');
   store.commit('setRange', queryParams.range);
+
+  store.commit('setTheme', queryParams.theme || '');
+  store.commit('setEmbed', queryParams.embed || false);
+  store.commit('setBackground', queryParams.background || '');
+  if (queryParams.theme) store.commit('setDark', queryParams.theme === 'dark');
 
   store.commit('setOs', queryParams.os || '');
   store.commit('setDevice', queryParams.device || '');
