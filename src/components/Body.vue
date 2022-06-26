@@ -31,7 +31,7 @@ const store = useStore();
 
 const countries = ref({});
 
-const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, dark, summary, showVisitors, embed } = mapGetters();
+const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event, dark, summary, showVisitors, embed } = mapGetters();
 
 const visitorsString = computed(() => {
   return showVisitors.value ? 'Visitors' : 'Pageviews';
@@ -74,7 +74,7 @@ function getSummaryData() {
 }
 
 function countryClicked(country) {
-  console.log('clicked on', country);
+  // console.log('clicked on', country);
   store.commit('setCountry', country);
 }
 
@@ -104,6 +104,8 @@ watch(utm_source, getCountryData);
 watch(utm_medium, getCountryData);
 watch(utm_campaign, getCountryData);
 watch(country, getCountryData);
+watch(region, getCountryData);
+watch(city, getCountryData);
 watch(event, getCountryData);
 
 watch(range, periodicRefresh)
@@ -291,8 +293,37 @@ watch(range, periodicRefresh)
 
     <div class="row mt-3">
       <div class="col-md-6">
-        <Card title="Countries">
-          <SvgMap :countries="countries" :dark="dark" :showVisitors="showVisitors" @clicked="countryClicked" />
+        <Card>
+          <h5 class="card-title float-left tweaked">Locations</h5>
+          <ul class="nav nav-tabs float-right">
+            <li class="nav-item ms-auto">
+              <a class="nav-link active" data-bs-toggle="tab" href="#countries">Countries</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#regions">Regions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#cities">Cities</a>
+            </li>
+          </ul>
+
+          <div class="tab-content mt-5">
+            <div class="tab-pane fade show active" id="countries">
+              <SvgMap :countries="countries" :dark="dark" :showVisitors="showVisitors" @clicked="countryClicked" />
+            </div>
+            <div class="tab-pane fade" id="regions">
+              <small class="text-muted w-495 d-inline-block">Region</small>
+              <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
+
+              <PseudoTable column="region" setter="setRegion" :keyFormatter="capitalizeFirstLetter" />
+            </div>
+            <div class="tab-pane fade" id="cities">
+              <small class="text-muted w-495 d-inline-block">City</small>
+              <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
+
+              <PseudoTable column="city" setter="setCity" :keyFormatter="capitalizeFirstLetter" />
+            </div>
+          </div>
         </Card>
       </div>
 

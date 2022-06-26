@@ -148,6 +148,26 @@ export function whereClauseComponents(store, skipDates, comparison, excludeEvent
         }
         components.push(ps);
     }
+    // region
+    if (store.state.region !== '') {
+        let val = store.state.region || null;
+        let ps = val ? `region = '${ val }'` : `region is null`;
+        if (SIV && val) {
+            let ps2 = SIV.encrypt(val).toString();
+            ps = `(${ ps } OR region = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
+    // city
+    if (store.state.city !== '') {
+        let val = store.state.city || null;
+        let ps = val ? `city = '${ val }'` : `city is null`;
+        if (SIV && val) {
+            let ps2 = SIV.encrypt(val).toString();
+            ps = `(${ ps } OR city = '${ ps2 }')`;
+        }
+        components.push(ps);
+    }
 
     // Unencrypted filters
     if (store.state.os) components.push(`os = '${ store.state.os }'`);

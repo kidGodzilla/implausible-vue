@@ -7,7 +7,7 @@ import Popper from "vue3-popper";
 const store = useStore();
 
 import { mapGetters } from '../store/map-state'
-let { start, end, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, range, summary, showVisitors } = mapGetters();
+let { start, end, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event, range, summary, showVisitors } = mapGetters();
 const lineData = ref([]);
 const loading = ref(true);
 const roughEdge = ref(false);
@@ -130,6 +130,8 @@ watch(utm_source, fetchData);
 watch(utm_medium, fetchData);
 watch(utm_campaign, fetchData);
 watch(country, fetchData);
+watch(region, fetchData);
+watch(city, fetchData);
 watch(event, fetchData);
 </script>
 

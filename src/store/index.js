@@ -24,6 +24,8 @@ function fixSearch(state) {
     if (state.utm_medium !== '') targetSearch += `&utm_medium=${ state.utm_medium }`;
     if (state.utm_campaign !== '') targetSearch += `&utm_campaign=${ state.utm_campaign }`;
     if (state.country !== '') targetSearch += `&country=${ state.country }`;
+    if (state.region !== '') targetSearch += `&region=${ state.region }`;
+    if (state.city !== '') targetSearch += `&city=${ state.city }`;
 
     if (state.event !== '') targetSearch += `&event=${ state.event }`;
 
@@ -66,6 +68,8 @@ export default createStore({
             utm_medium: '',
             utm_campaign: '',
             country: '',
+            region: '',
+            city: '',
             event: '',
         }
     },
@@ -100,6 +104,8 @@ export default createStore({
         utm_medium: state => state.utm_medium,
         utm_campaign: state => state.utm_campaign,
         country: state => state.country,
+        region: state => state.region,
+        city: state => state.city,
         event: state => state.event,
     },
     mutations: {
@@ -175,6 +181,14 @@ export default createStore({
         },
         setCountry (state, country) {
             state.country = country;
+            fixSearch(state);
+        },
+        setRegion (state, region) {
+            state.region = region;
+            fixSearch(state);
+        },
+        setCity (state, city) {
+            state.city = city;
             fixSearch(state);
         },
         setEvent (state, event) {

@@ -22,8 +22,8 @@ const { column, iconify, favicons, browserIcons, osIcons, links, setter, linkPre
   keyFormatter: Function,
 });
 
-const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event, range, summary, showVisitors } = mapGetters();
-const watcherBundle = { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event };
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event, range, summary, showVisitors } = mapGetters();
+const watcherBundle = { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event };
 
 const valueColumnActual = computed(() => {
   return valueColumn || (showVisitors.value ? 'count(DISTINCT ip)' : 'count(*)');
@@ -143,6 +143,8 @@ watch(utm_source, getData);
 watch(utm_medium, getData);
 watch(utm_campaign, getData);
 watch(country, getData);
+watch(region, getData);
+watch(city, getData);
 watch(event, getData);
 </script>
 

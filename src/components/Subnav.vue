@@ -17,11 +17,11 @@ const disabledDates = {
   preventDisableDateSelection: true,
 }
 
-const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, domains, event, range, rangeString, liveVisitors, dark, embed } = mapGetters();
+const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, domains, event, range, rangeString, liveVisitors, dark, embed } = mapGetters();
 const store = useStore();
 
-const filterable = ref({ path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event });
-const filterKeys = 'path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, event'.split(', ')
+const filterable = ref({ path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event });
+const filterKeys = 'path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event'.split(', ')
 const filters = ref([]);
 
 const search = computed(() => location.search);
@@ -46,6 +46,8 @@ watch(utm_source, computeActiveFilters);
 watch(utm_medium, computeActiveFilters);
 watch(utm_campaign, computeActiveFilters);
 watch(country, computeActiveFilters);
+watch(region, computeActiveFilters);
+watch(city, computeActiveFilters);
 watch(event, computeActiveFilters);
 computeActiveFilters();
 

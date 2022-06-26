@@ -99,6 +99,9 @@ function handleQueryParams() {
   store.commit('setUtm_source', queryParams.utm_source || '');
   store.commit('setUtm_medium', queryParams.utm_medium || '');
   store.commit('setUtm_campaign', queryParams.utm_campaign || '');
+  store.commit('setCountry', queryParams.country || '');
+  store.commit('setRegion', queryParams.region || '');
+  store.commit('setCity', queryParams.city || '');
   store.commit('setEvent', queryParams.event || '');
 }
 
