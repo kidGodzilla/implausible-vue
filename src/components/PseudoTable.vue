@@ -5,12 +5,13 @@ import { mapGetters } from '../store/map-state';
 import { useStore } from 'vuex';
 const store = useStore();
 
-const { column, iconify, favicons, browserIcons, osIcons, links, setter, linkPrefix, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
+const { column, iconify, favicons, browserIcons, osIcons, showFlags, links, setter, linkPrefix, limit, defaultText, valueColumn, loadTimes, valueFormatter, keyFormatter } = defineProps({
   column: String,
   iconify: Boolean,
   favicons: Boolean,
   browserIcons: Boolean,
   osIcons: Boolean,
+  showFlags: Boolean,
   links: Boolean,
   setter: String,
   linkPrefix: String,
@@ -109,6 +110,10 @@ function addIcon(s) {
   return lookup[s];
 }
 
+function flagForCountryCode(code) {
+  return `https://cdn.jsdelivr.net/npm/svg-country-flags/svg/${ code.toLowerCase() }.svg`
+}
+
 function columnToHost(s) {
   s = (s+'').toLowerCase().trim();
 
@@ -177,6 +182,10 @@ watch(event, getData);
 
         <div v-if="osIcons" style="display: inline-block">
           <img v-if="row[column] && osIcons" :src="`${ inferOsIcon(row[column]) }`">&nbsp;&thinsp;
+        </div>
+
+        <div v-if="showFlags" style="display: inline-block">
+          <img v-if="row[column] && showFlags" style="max-width:25px;max-height:25px;height:25px;margin-top: -5px;" :src="`${ flagForCountryCode(row[column]) }`">&nbsp;&thinsp;
         </div>
 
         <div v-if="setter" style="display: inline-block">
