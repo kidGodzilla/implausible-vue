@@ -267,28 +267,28 @@ watch(range, periodicRefresh)
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-                <PseudoTable column="pathname" setter="setPath" defaultText="None" />
+                <PseudoTable column="pathname" setter="setPath" :linkPrefix="host" :links="true" defaultText="None" />
               </div>
 
               <div class="tab-pane fade show" id="loadtimes">
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">Avg. Load Time</small>
 
-                <PseudoTable column="pathname" valueColumn="AvgLoadTime" setter="setPath" :loadTimes="true" :valueFormatter="twoPlacesMinZero" />
+                <PseudoTable column="pathname" valueColumn="AvgLoadTime" setter="setPath" :loadTimes="true" :linkPrefix="host" :links="true" :valueFormatter="twoPlacesMinZero" />
               </div>
 
               <div class="tab-pane fade show" id="entrypages">
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">Entries</small>
 
-                <PseudoTable column="pathname" valueColumn="EntrypageCount" setter="setPath" defaultText="None" />
+                <PseudoTable column="pathname" valueColumn="EntrypageCount" setter="setPath" :linkPrefix="host" :links="true" defaultText="None" />
               </div>
 
               <div class="tab-pane fade show" id="exitpages">
                 <small class="text-muted w-495 d-inline-block">Page URL</small>
                 <small class="text-muted w-495 d-inline-block text-right">Exits</small>
 
-                <PseudoTable column="pathname" valueColumn="ExitPagecount" setter="setPath" defaultText="None" />
+                <PseudoTable column="pathname" valueColumn="ExitPagecount" setter="setPath" :linkPrefix="host" :links="true" defaultText="None" />
               </div>
             </div>
           </div>
@@ -329,13 +329,13 @@ watch(range, periodicRefresh)
               <small class="text-muted w-495 d-inline-block">Region</small>
               <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-              <PseudoTable column="region" setter="setRegion" :keyFormatter="capitalizeFirstLetter" />
+              <PseudoTable column="region" setter="setRegion" :addCountries="true" :keyFormatter="capitalizeFirstLetter" />
             </div>
             <div class="tab-pane fade" id="cities">
               <small class="text-muted w-495 d-inline-block">City</small>
               <small class="text-muted w-495 d-inline-block text-right">{{ visitorsString }}</small>
 
-              <PseudoTable column="city" setter="setCity" :keyFormatter="capitalizeFirstLetter" />
+              <PseudoTable column="city" setter="setCity" :addCountries="true" :keyFormatter="capitalizeFirstLetter" />
             </div>
           </div>
         </Card>

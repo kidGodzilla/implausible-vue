@@ -231,12 +231,14 @@ export async function queryCounts(store, column = 'hour', max = 10) {
     const columnValue = (store.state.showVisitors ? 'count(DISTINCT ip)' : 'count(*)');
     // console.log('columnValue', columnValue, store.state.showVisitors);
 
+    let addCountries = column === 'region' || column === 'city';
     let isTimeseries = column === 'hour' || column === 'date';
     let orderByValue = isTimeseries ? column : columnValue;
     let direction = isTimeseries ? 'ASC' : 'DESC';
     let limit = isTimeseries ? '' : ` LIMIT ${ max }`;
+    let addRegion = column === 'city';
 
-    let sql = `SELECT ${ column }, ${ columnValue } FROM visits${ whereClauseComponents(store, 0, 0, column === 'event' && !store.state.event) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
+    let sql = `SELECT ${ column }${ addCountries ? ', country_code':'' }${ addRegion ? ', region':'' }, ${ columnValue } FROM visits${ whereClauseComponents(store, 0, 0, column === 'event' && !store.state.event) } GROUP BY ${ column } ORDER BY ${ orderByValue } ${ direction }${ limit };`;
     let res = await query(sql);
 
     // console.log('queryCounts:', sql, res);
@@ -246,6 +248,11 @@ export async function queryCounts(store, column = 'hour', max = 10) {
             try {
                 let decrypted = SIV.decrypt(CryptoJS.enc.Hex.parse(row[column])).toString(CryptoJS.enc.Utf8);
                 if (decrypted && decrypted != 'false') row[column] = decrypted;
+
+                if (addRegion) {
+                    decrypted = SIV.decrypt(CryptoJS.enc.Hex.parse(row.region)).toString(CryptoJS.enc.Utf8);
+                    if (decrypted && decrypted != 'false') row.region = decrypted;
+                }
             } catch(e){}
         });
     }
