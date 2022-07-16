@@ -73,6 +73,13 @@ export async function query(string) {
     console.log('query', string, result);
     console.timeEnd('query time '+s);
 
+    // if (window.debug) {
+    //     // Analyze query and seek recommended indexes
+    //     await worker.db.query(`.expert`);
+    //     let expert_recommendation = await worker.db.query(string);
+    //     console.warn('Index recommendation for query:', expert_recommendation);
+    // }
+
     return result;
 }
 
