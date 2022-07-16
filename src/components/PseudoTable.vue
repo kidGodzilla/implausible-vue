@@ -136,6 +136,11 @@ function maxLength(s, n = 40) {
   return s;
 }
 
+function justTaco(s) {
+  if (s.includes('?')) s = s.split('?')[0];
+  return s;
+}
+
 onMounted(getData);
 watch(host, getData);
 watch(path, getData);
@@ -230,15 +235,25 @@ watch(event, getData);
           >
             {{ maxLength(row[column]) }}
           </a>
+
+          <a
+              v-if="column === 'referer_url' && (row[column] || '').includes('//t.co/') && (row[column] || '').length > 13"
+              :href="`https://twitter.com/search?q=${ encodeURIComponent(justTaco(row[column])) }&src=typed_query&f=top`"
+              style="margin-left: 5px"
+              target="_blank"
+          >
+            <i class="bi bi-twitter"></i>
+          </a>
+
           &nbsp;<a
             v-if="row[column] && links" class="d-inline-block text-truncate"
             :href="`${ row[column].indexOf('http') ? 'http://':'' }${ linkPrefix || '' }${ row[column] }`"
             style="text-decoration: none"
             title="Open in new tab"
             target="_blank"
-        >
-          <i class="bi bi-box-arrow-up-right"></i>
-        </a>
+          >
+            <i class="bi bi-box-arrow-up-right"></i>
+          </a>
         </div>
 
         <span v-if="row[column] && !links && !setter">{{ keyFormatter ? keyFormatter(row[column]) : row[column] }}</span>
