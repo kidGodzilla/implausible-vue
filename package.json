@@ -6,6 +6,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "git push dokku main:master",
+    "copy": "cp -a dist/ ~/plausible-simple-backend/frontend/ && rm ~/plausible-simple-backend/frontend/analytics.sqlite3 && rm ~/plausible-simple-backend/frontend/analytics.sqlite3.png && cp -a dist/ ~/sqlite-analytics/frontend/ && rm ~/sqlite-analytics/frontend/analytics.sqlite3 && rm ~/sqlite-analytics/frontend/analytics.sqlite3.png",
     "start": "node ."
   },
   "dependencies": {
