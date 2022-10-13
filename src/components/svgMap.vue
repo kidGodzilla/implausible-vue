@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" ref="svgMap"></div>
+  <div :id="id" ref="svgMap" :class="{ loading }"></div>
 </template>
 
 <script>
@@ -22,6 +22,9 @@ export default {
     showVisitors: {
       type: Boolean
     },
+    loading: {
+      type: Boolean
+    }
   },
 
   methods: {
@@ -88,6 +91,10 @@ export default {
       this.$nextTick(() => {
         this.createMap()
       });
+    },
+    loading() {
+      if (this.loading)
+        this.$refs.svgMap.innerHTML = '<div class="spinner-border spinme" role="status"></div>';
     }
   }
 

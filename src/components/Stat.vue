@@ -15,6 +15,7 @@ const props = defineProps({
 
 const prior = ref('0');
 const statRaw = ref('0');
+const loading = ref(true);
 const { host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event, range, start, summary } = mapGetters();
 
 // Visitors: SELECT count(DISTINCT ip) from visits
@@ -50,6 +51,7 @@ function isNeg(val) {
 
 async function getValue() {
   if (!store.state.host) return;
+  loading.value = true;
 
   const whereClause = whereClauseComponents(store);
 
@@ -83,6 +85,7 @@ async function getValue() {
     statRaw.value = result[0]['AVG(x.MaxValue)'];
   }
 
+  loading.value = false;
   getPriorValue();
 }
 
@@ -120,6 +123,7 @@ async function getPriorValue(comparison) {
 
     prior.value = result[0]['AVG(x.MaxValue)'];
   }
+  loading.value = false;
 }
 
 const stat = computed(() => {
@@ -163,7 +167,7 @@ watch(event, getValue);
 </script>
 
 <template>
-  <div class="col-6 col-md-3" :class="{ cp: underline, selected: !muted && !underline }">
+  <div class="col-6 col-md-3 stat" :class="{ cp: underline, selected: !muted && !underline, loading }">
 
     <h6 class="card-subtitle mt-2 mb-2" :class="{ 'text-muted': muted, 'text-decoration-underline': underline, 'link-color': underline }">
       <Popper v-if="tooltip" :class="{ 'text-decoration-underline': underline }" hover :content="tooltip" placement="bottom">
@@ -188,4 +192,5 @@ body.dark .link-color { color: #4c9be8 !important; }
 /*body.dark .selected { color: #fff; background-color: #4c9be8bb; }*/
 
 body.dark .badge { padding: 0.35em 0.65em 0.3em }
+.stat.loading { opacity: 0.25 !important; }
 </style>

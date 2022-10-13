@@ -35,6 +35,7 @@ import { onMounted, ref, watch, computed } from 'vue';
 const store = useStore();
 
 const countries = ref({});
+const mapLoading = ref(true);
 
 const { range, host, path, os, device, is_bot, is_new, browser, language, referrer, utm_source, utm_medium, utm_campaign, country, region, city, event, dark, summary, showVisitors, embed } = mapGetters();
 
@@ -43,6 +44,7 @@ const visitorsString = computed(() => {
 });
 
 async function getCountryData() {
+  mapLoading.value = true;
   // if (range.value.length === 7 || range.value > 1000) {
   //   let summary_value = JSON.parse(JSON.stringify(summary.value));
   //   let countries_value = showVisitors.value ? summary_value.country_code__visitors : summary_value.country_code;
@@ -71,6 +73,7 @@ async function getCountryData() {
   });
 
   countries.value = newCountries;
+  mapLoading.value = false;
 }
 
 function getSummaryData() {
@@ -317,7 +320,7 @@ watch(range, periodicRefresh)
 
           <div class="tab-content mt-5">
             <div class="tab-pane fade show active" id="map">
-              <SvgMap :countries="countries" :dark="dark" :showVisitors="showVisitors" @clicked="countryClicked" />
+              <SvgMap :countries="countries" :dark="dark" :loading="mapLoading" :showVisitors="showVisitors" @clicked="countryClicked" />
             </div>
             <div class="tab-pane fade" id="countries">
               <small class="text-muted w-495 d-inline-block">Country</small>

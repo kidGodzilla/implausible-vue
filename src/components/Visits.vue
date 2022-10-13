@@ -27,6 +27,8 @@ const xLabel = ref('day');
 async function fetchData() {
   if (!host.value) {
     return loading.value = false;
+  } else {
+    loading.value = true;
   }
 
   if (range.value > 1000) xLabel.value = 'month';

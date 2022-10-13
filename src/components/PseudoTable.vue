@@ -38,6 +38,7 @@ const loading = ref(true);
 async function getData() {
   // if column is entrypages or ExitPagecount
   let result = [];
+  loading.value = true;
   if (valueColumn === 'AvgLoadTime') result = await queryLoadTimes(store);
   else if (valueColumn === 'EntrypageCount') result = await queryEntryExitPages(store, column, valueColumn, limit || 100);
   else if (valueColumn === 'ExitPagecount') result = await queryEntryExitPages(store, column, valueColumn, limit || 100);
@@ -165,7 +166,7 @@ watch(event, getData);
 </script>
 
 <template>
-  <div class="mt-2 pseudotable">
+  <div class="mt-2 pseudotable" :class="{ loading }">
 
     <div class="spinner-border spinme" role="status" v-if="loading"></div>
 
@@ -271,4 +272,5 @@ i.bi.bi-box-arrow-up-right {
   position: relative;
   top: -1px;
 }
+.pseudotable.loading { height: 200px }
 </style>
