@@ -6,3 +6,5 @@ dist-ssr
 .idea
 .vscode
 notes.MD
+public/analytics.sqlite3
+public/analytics.sqlite3.png

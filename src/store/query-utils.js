@@ -63,15 +63,42 @@ async function createOneWorker() {
 }
 
 export async function query(string) {
+    //CHECK IF BACKEND METHOD IS API
+  if (import.meta.env.VITE_BACKEND_METHOD === "api") {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/getdata`, {
+        method: "POST",
+
+        body: JSON.stringify({
+          statement: string,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      if (!res.ok) {
+        const message = `An error has occured: ${res.status} - ${res.statusText}`;
+        throw new Error(message);
+      }
+      const data = await res.json();
+      let results = JSON.stringify(data);
+      let array_of_results = JSON.parse(results);
+
+      return array_of_results;
+    } catch (err) {
+      let errors = err.message;
+      console.log(errors);
+    }
+  } else {
     let worker = await createOneWorker();
 
     let s = randomString();
-    console.time('query time '+s);
+    console.time("query time " + s);
 
     let result = await worker.db.query(string);
 
-    console.log('query', string, result);
-    console.timeEnd('query time '+s);
+    console.log("query", string, result);
+    console.timeEnd("query time " + s);
 
     // if (window.debug) {
     //     // Analyze query and seek recommended indexes
@@ -81,6 +108,7 @@ export async function query(string) {
     // }
 
     return result;
+  }
 }
 
 export function isoDate(d) {
