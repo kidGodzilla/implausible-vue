@@ -32,10 +32,17 @@ function fixBodyClass() {
   document.body.removeAttribute('class');
   document.body.classList.add(themeName);
 
-  document.querySelector('#theme').href = `https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.1.3/${ themeName }/bootstrap.min.css`;
+  // document.querySelector('#theme').href = `https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.1.3/${ themeName }/bootstrap.min.css`;
 
   if (dark.value) document.body.classList.add('dark');
   else document.body.classList.remove('dark');
+
+  // html data-skin="dark"
+  // document.querySelector('html').setAttribute('data-skin', 'dark')
+
+  if (dark.value) document.querySelector('html').setAttribute('data-skin', 'dark');
+  else document.querySelector('html').setAttribute('data-skin', 'light');
+
 }
 watch(background, setBackground);
 watch(dark, fixBodyClass);

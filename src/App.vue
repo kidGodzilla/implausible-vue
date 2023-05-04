@@ -147,9 +147,9 @@ body.dark .bg-grey { background: rgba(255, 255, 255, 0.075) }
 .cursor-help { cursor: help }
 .cp { cursor: pointer }
 
-.nav-tabs { font-size: 12px }
-body:not(.dark) { background-color: #fafafa }
-.nav-tabs .nav-link { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important }
+/*.nav-tabs { font-size: 12px }*/
+/*body:not(.dark) { background-color: #fafafa }*/
+/*.nav-tabs .nav-link { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important }*/
 .spinme { display:block; margin: 0 auto; position: relative; top: 125px }
 .dropdown-menu.right.show { z-index: 99999 !important; transform: translate3d(-50px, 42px, 0px) !important }
 .dropdown-menu.left.show { z-index: 99999 !important; transform: translate3d(25px, 42px, 0px) !important }
@@ -164,7 +164,7 @@ body.dark .pseudotable>div:hover { background: #ffffff10 }
 body:not(.dark) .shaded a { color: #000; }
 body.dark .shaded a { color: #ebebeb; }
 #sankeyChart { height: 500px; width: 100%; }
-.nav-pills { margin-top: -6px }
+.nav-pills { margin-top: 6px }
 .shaded { padding-left: 3px }
 
 .nav.nav-pills.mb-1 {

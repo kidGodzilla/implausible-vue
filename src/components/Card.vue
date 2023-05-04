@@ -14,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="card min-357" :class="{ 'bg-dark': dark }">
+  <div class="card min-357" :class="{ 'x-bg-dark': dark }">
     <div class="card-header" v-if="header">
       <slot name="header">
         {{ header }}
@@ -38,6 +38,7 @@ defineProps({
 <style scoped>
 .card-title {
   position: relative;
-  top: -6px;
+  max-width: 100px;
+  /*top: -6px;*/
 }
 </style>

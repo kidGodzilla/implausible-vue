@@ -143,11 +143,11 @@ watch(range, periodicRefresh)
 
     <div class="row mt-3">
       <div class="col-md-6">
-        <div class="card min-357" :class="{ 'bg-dark': dark }">
+        <div class="card min-357" :class="{ 'x-bg-dark': dark }">
           <div class="card-body">
             <h5 class="card-title float-left tweaked">Sources</h5>
 
-            <ul class="nav nav-tabs float-right">
+            <ul class="nav nav-pills float-right">
               <li class="nav-item ms-auto">
                 <a class="nav-link active" data-bs-toggle="tab" href="#referrers"><span class="d-none d-sm-inline">Referrers</span><span class="d-inline d-sm-none">All</span></a>
               </li>
@@ -246,11 +246,11 @@ watch(range, periodicRefresh)
       </div>
 
       <div class="col-md-6 mt-3 mt-sm-0">
-        <div class="card min-357" :class="{ 'bg-dark': dark }">
+        <div class="card min-357" :class="{ 'x-bg-dark': dark }">
           <div class="card-body">
             <h5 class="card-title float-left tweaked">Pages</h5>
 
-            <ul class="nav nav-tabs float-right">
+            <ul class="nav nav-pills float-right">
               <li class="nav-item ms-auto">
                 <a class="nav-link active" data-bs-toggle="tab" href="#pages">Top Pages</a>
               </li>
@@ -303,7 +303,7 @@ watch(range, periodicRefresh)
       <div class="col-md-6">
         <Card>
           <h5 class="card-title float-left tweaked">Locations</h5>
-          <ul class="nav nav-tabs float-right">
+          <ul class="nav nav-pills float-right">
             <li class="nav-item ms-auto">
               <a class="nav-link active" data-bs-toggle="tab" href="#map">Map</a>
             </li>
@@ -348,7 +348,7 @@ watch(range, periodicRefresh)
 
         <Card>
           <h5 class="card-title float-left tweaked">Users</h5>
-          <ul class="nav nav-tabs float-right">
+          <ul class="nav nav-pills float-right">
             <li class="nav-item ms-auto">
               <a class="nav-link active" data-bs-toggle="tab" href="#size"><span class="d-none d-sm-inline">Device </span>Type</a>
             </li>
@@ -438,7 +438,8 @@ watch(range, periodicRefresh)
 .card-title.float-left.tweaked {
   margin-bottom: -35px;
   position: relative;
-  top: -6px;
+  max-width: 100px;
+  /*top: -6px;*/
 }
 .nav.nav-tabs.float-right {
   position: relative;

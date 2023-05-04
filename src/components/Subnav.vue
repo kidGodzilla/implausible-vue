@@ -151,7 +151,7 @@ function filterKeyToSetter(s) {
 <template>
   <div class="row">
     <div class="col-12 mb-3" v-show="!embed" v-if="filters.length">
-      <button type="button" v-for="filter in filters" class="btn mr-5 mb-1" :class="{ 'btn-dark': dark, 'btn-secondary': !dark }" @click="removeFilter(filterKeyToSetter(filter))">
+      <button type="button" v-for="filter in filters" class="btn mr-5 mb-1 btn-dark" @click="removeFilter(filterKeyToSetter(filter))">
         <strong>{{ capitalizeFirstLetter(filter) }}</strong> = &nbsp;<code>{{ filterable[filter] }}</code> &nbsp; <a>&#x2715;</a>
       </button>
     </div>
