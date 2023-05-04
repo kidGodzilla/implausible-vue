@@ -199,6 +199,7 @@ watch(event, fetchData);
   body.dark .edge {
     /*background: linear-gradient(270deg, rgba(32,55,76,1) 0%, rgba(32,55,76,1) 25%, rgba(32,55,76,0) 100%);*/
     background: linear-gradient(270deg, rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) 0%, rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) 25%, rgba(var(--bs-dark-rgb), 0) 100%);
+    background: linear-gradient(270deg, rgba(25, 32, 48, var(--bs-bg-opacity)) 0%, rgba(25, 32, 48, var(--bs-bg-opacity)) 25%, rgba(25, 32, 48, 0) 100%);
   }
 </style>
 <style>

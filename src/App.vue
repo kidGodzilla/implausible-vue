@@ -199,4 +199,14 @@ body.quartz.dark .dropdown-menu { background: rgba(var(--bs-dark-rgb), 1); }
   .nav-pills { margin-top: -8px }
   .nav-tabs .nav-link { padding: .5rem .5rem }
 }
+
+.dark .card.bg-dark {
+  background-color: #192030 !important;
+  border-color: #222b41 !important;
+}
+
+body.dark {
+  background-color: #141926;
+  color: rgba(255,255,255,.6);
+}
 </style>
